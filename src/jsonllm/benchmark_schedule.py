@@ -78,6 +78,18 @@ def schedule(manifest):
                         "concurrency": 1,
                     }
                 )
+    for model in ("base", "jsonllm"):
+        for method in ("whole_json", "shared_fields", "vllm_json"):
+            jobs.append(
+                {
+                    "stage": "application",
+                    "group": "application",
+                    "repeat": 0,
+                    "model": model,
+                    "method": method,
+                    "concurrency": 1,
+                }
+            )
     for index, job in enumerate(jobs):
         job["name"] = f"{index:04}-{job['stage']}-{job['group']}-{job['model']}-{job['method']}"
     return jobs

@@ -39,12 +39,63 @@ def prepare_schemas(cases, method, backend):
 
 
 def object_schema(record):
+    if record.get("output_mode") == "ui_tree":
+        nodes = [
+            {
+                "type": "object",
+                "properties": {
+                    "type": {"const": "Value"},
+                    "name": {"const": name},
+                    "value": value_schema(field),
+                },
+                "required": ["type", "name", "value"],
+                "additionalProperties": False,
+            }
+            for name, field in record["questions"].items()
+        ]
+        return {
+            "type": "object",
+            "properties": {
+                "type": {"const": "DecisionPanel"},
+                "children": {
+                    "type": "array",
+                    "prefixItems": nodes,
+                    "minItems": len(nodes),
+                    "maxItems": len(nodes),
+                },
+            },
+            "required": ["type", "children"],
+            "additionalProperties": False,
+        }
     return {
         "type": "object",
         "properties": {k: value_schema(v) for k, v in record["questions"].items()},
         "required": list(record["questions"]),
         "additionalProperties": False,
     }
+
+
+def render_output(record, values):
+    if record.get("output_mode") != "ui_tree":
+        return values
+    return {
+        "type": "DecisionPanel",
+        "children": [
+            {"type": "Value", "name": name, "value": values[name]} for name in record["questions"]
+        ],
+    }
+
+
+def decision_values(record, output):
+    if record.get("output_mode") == "ui_tree":
+        from jsonschema import Draft202012Validator
+
+        Draft202012Validator(object_schema(record)).validate(output)
+        result = {child["name"]: child["value"] for child in output["children"]}
+    else:
+        result = output
+    validate_object(record, result)
+    return result
 
 
 def whole_prompt(record, tokenizer):
@@ -65,6 +116,13 @@ def whole_prompt(record, tokenizer):
             "No explanations.\n" + dumps(fields),
         },
     ]
+    if record.get("output_mode") == "ui_tree":
+        messages[-1]["content"] += (
+            "\nReturn the completed UI tree instead of a flat object: "
+            '{"type":"DecisionPanel","children":[{"type":"Value",'
+            '"name":"FIELD_NAME","value":FIELD_VALUE},...]}. '
+            "Use one child per field in the listed order. Choose each FIELD_VALUE by its rule."
+        )
     rendered = tokenizer.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True, enable_thinking=False
     )
@@ -172,7 +230,7 @@ class WholeJSON:
             predictor.synchronize()
         text = predictor.tokenizer.decode(generated)
         result = strict_json(text)
-        validate_object(record, result)
+        decision_values(record, result)
         return result, {
             "output_tokens": len(generated) + 1,
             "input_tokens": len(ids),
@@ -225,7 +283,7 @@ class VLLMJSON:
         if choice["finish_reason"] != "stop":
             raise ValueError("truncated_output")
         result = strict_json(choice["text"])
-        validate_object(record, result)
+        decision_values(record, result)
         return result, {
             "output_tokens": body["usage"]["completion_tokens"],
             "input_tokens": body["usage"]["prompt_tokens"],

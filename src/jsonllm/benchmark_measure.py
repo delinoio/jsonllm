@@ -6,7 +6,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 from .benchmark_data import assemble_topology, inference_record
-from .benchmark_engine import field_inference, validate_object
+from .benchmark_engine import decision_values, field_inference, render_output, validate_object
 from .io import dumps
 from .metrics import distribution
 
@@ -22,6 +22,7 @@ def measure(case, method, backend, *, scheduled=None, timeout=120):
         record = inference_record(case)
         if method in {"whole_json", "vllm_json"}:
             output, metrics = backend.infer(record, case["json_max_tokens"], scheduled + timeout)
+            output = decision_values(record, output)
         else:
             output, metrics = field_inference(
                 record,
@@ -30,7 +31,11 @@ def measure(case, method, backend, *, scheduled=None, timeout=120):
                 deadline=scheduled + timeout,
             )
         validate_object(record, output)
-        dumps(output)
+        rendered = render_output(record, output)
+        dumps(rendered)
+        if record.get("output_mode") == "ui_tree":
+            decision_values(record, rendered)
+            metrics["rendered_output"] = rendered
         if case["kind"] in {"tree", "workflow"}:
             try:
                 graph = assemble_topology(output, case["kind"])
@@ -52,6 +57,7 @@ def measure(case, method, backend, *, scheduled=None, timeout=120):
         "kind": case["kind"],
         "language": case["language"],
         "method": method,
+        "output_mode": case.get("output_mode", "decisions"),
         "latency_seconds": latency,
         "service_seconds": ended - entered,
         "dispatch_queue_seconds": entered - scheduled,

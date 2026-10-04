@@ -62,8 +62,11 @@ repair outputs. It checks references and ordering. This is **bounded topology
 selection from supplied facts**, not unrestricted tree design or workflow
 synthesis from a vague natural-language request. Workflows are never executed.
 Topology selection latency includes assembly/validation after the same flat
-decision object. It is not a comparison against directly serializing the final
-nested tree; that additional application experiment remains unperformed.
+decision object. A separate 64-record application experiment compares direct
+generation of a completed `DecisionPanel` tree with typed decisions followed by
+code assembly. Both paths produce the same ordered children and values. The
+panel shape is fixed: this measures serialization/assembly cost, not creative UI
+design. It runs once per model with eager whole JSON, shared fields, and vLLM.
 
 ## Timing and quality
 
@@ -123,6 +126,8 @@ affected comparison, not replacement of only unfavorable records.
 The extra campaign budget is $100, including setup, unsuccessful attempts,
 storage, and recovery. Stop experiments before $90 and reserve $10 for recovery
 and cleanup. Admit complete comparison blocks using development timing only.
-Work proceeds in the fixed order core, scaling, load, then topology. Unperformed
+Work proceeds in the fixed order core, scaling, load, topology, then the separate
+application serialization comparison. Once a complete block cannot fit, all later
+blocks remain unperformed. Unperformed
 blocks and exclusions remain in the report. One H100 80GB Secure GPU is used;
 there is no external teacher API, retraining, endpoint, or public release.

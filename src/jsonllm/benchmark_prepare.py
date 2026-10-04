@@ -5,7 +5,7 @@ import math
 from pathlib import Path
 
 from .benchmark_data import suite
-from .benchmark_engine import whole_prompt
+from .benchmark_engine import render_output, whole_prompt
 from .io import dumps, write_json, write_jsonl
 from .prompts import SHARED_VERSION, context_ids, field_example, prompt_ids
 from .release import BASE_MODEL, BASE_REVISION, MODEL_ID, MODEL_REVISION
@@ -30,7 +30,12 @@ def prepare(root, tokenizer):
             row["json_max_tokens"] = max(
                 128,
                 math.ceil(
-                    len(tokenizer.encode(dumps(row["answers"]), add_special_tokens=False)) * 1.25
+                    len(
+                        tokenizer.encode(
+                            dumps(render_output(row, row["answers"])), add_special_tokens=False
+                        )
+                    )
+                    * 1.25
                 )
                 + 32,
             )
@@ -84,7 +89,7 @@ def prepare(root, tokenizer):
         "concurrencies": [1, 2, 4, 8],
         "arrival_rates": [0.5, 1, 2, 4],
         "request_timeout_seconds": 120,
-        "priority": ["core", "scale", "load", "topology"],
+        "priority": ["core", "scale", "load", "topology", "application"],
         "total_budget_usd": 100,
         "recovery_at_usd": 90,
         "output_budget_policy": (

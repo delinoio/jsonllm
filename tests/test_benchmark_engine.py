@@ -5,9 +5,11 @@ from jsonschema.exceptions import ValidationError
 
 from jsonllm.benchmark_data import make_case
 from jsonllm.benchmark_engine import (
+    decision_values,
     field_inference,
     object_schema,
     prepare_schemas,
+    render_output,
     validate_object,
 )
 from jsonllm.benchmark_measure import measure, summarize
@@ -96,3 +98,32 @@ def test_schema_preparation_deduplicates_and_does_not_receive_oracle():
     backend = Compiler()
     result = prepare_schemas([row, row], "whole_json", backend)
     assert len(backend.records) == result["distinct_object_schemas"] == 1
+
+
+def test_application_output_is_assembled_only_from_predictions():
+    row = make_case("application", 0, width=2)
+    row["output_mode"] = "ui_tree"
+    predicted = dict(row["answers"])
+    predicted["f0"] = next(v for v in row["questions"]["f0"]["enum"] if v != predicted["f0"])
+    output = render_output(row, predicted)
+    assert decision_values(row, output) == predicted
+    assert output["children"][0]["value"] != row["answers"]["f0"]
+    output["children"][0]["name"] = "unexpected"
+    with pytest.raises(ValidationError):
+        decision_values(row, output)
+
+
+def test_field_and_whole_application_paths_score_the_same_decisions():
+    row = make_case("application", 0, width=2)
+    row.update(output_mode="ui_tree", json_max_tokens=128)
+
+    class Whole:
+        def infer(self, record, max_tokens, deadline):
+            assert "answers" not in record
+            return render_output(record, row["answers"]), {"output_tokens": 50}
+
+    fields = measure(row, "shared_fields", Fake(row))
+    whole = measure(row, "whole_json", Whole())
+    assert fields["correct"] and whole["correct"]
+    assert fields["output"] == whole["output"]
+    assert fields["metrics"]["rendered_output"] == whole["metrics"]["rendered_output"]

@@ -212,7 +212,10 @@ def assemble_topology(values, kind):
 
 def inference_record(case):
     """Allowlist the inference boundary; no source oracle or reference answers."""
-    return copy.deepcopy({key: case[key] for key in ("id", "context", "questions")})
+    result = {key: case[key] for key in ("id", "context", "questions")}
+    if case.get("output_mode") == "ui_tree":
+        result["output_mode"] = "ui_tree"
+    return copy.deepcopy(result)
 
 
 def suite():
@@ -243,4 +246,7 @@ def suite():
                     row["condition"]["context_tokens"] = level
     for kind in ("tree", "workflow"):
         result[kind] = [topology_case(kind, i) for i in range(64)]
+    result["application"] = [make_case("application", i) for i in range(64)]
+    for row in result["application"]:
+        row["output_mode"] = "ui_tree"
     return result
