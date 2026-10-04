@@ -107,6 +107,17 @@ failures, not just successful outputs. `first_usable_seconds` is the internal ti
 when a validated field wave becomes available; whole-object methods expose only
 the completed object. This is not browser rendering latency or network streaming
 time. The existing public UI API still returns its final output atomically.
+If a later field fails, an earlier validated wave's timestamp remains in the raw
+record. An unsuccessful whole-object request has no usable output timestamp.
+
+Detailed stage profiling and external profilers are disabled during timing.
+The existing runtime's per-forward CUDA events and counters remain enabled and
+their overhead is included. Device memory sampling is also included for every
+method. The eager environment uses optimized FLA delta-rule kernels but the
+Transformers reference implementations of `causal_conv1d_fn` and
+`causal_conv1d_update`. This limits conclusions about a fully optimized eager
+implementation. It does not invalidate comparisons among the four methods under
+that same environment. The separate vLLM baseline uses its own optimized kernels.
 
 The vLLM server enables its [per-request timing metrics](https://docs.vllm.ai/en/latest/features/per_request_metrics/)
 to record scheduler queue time. This telemetry can add CPU overhead and is part
@@ -135,6 +146,12 @@ percentage-point loss in exact accuracy. Point estimates and uncertainty are
 separate. Paired comparisons resample record IDs, not repeated executions.
 Deterministic assembler tests are not mixed into model accuracy. A failed quality
 criterion prevents a claim of a quality-preserving speedup.
+Intervals are nominal 95% intervals, without adjustment for the many exploratory
+condition comparisons. The report gives both point-estimate and conservative
+quality decisions; neither proves performance on unrestricted real applications.
+The report also separates terminal attempts/s, valid complete outputs/s, and
+correct complete outputs/s. Failure counts and completion fractions accompany
+load results, so a fast failure is not mistaken for useful throughput.
 
 ## Reproduction and budget
 
@@ -161,6 +178,20 @@ data manifest, development raw records, gate results, and environment hashes.
 It writes the full planned schedule and development-based time estimates. Start
 the same worker without `--development-only` only after sealing. The worker
 rejects altered development evidence, source, or data and never overwrites trials.
+
+After recovery, build the report without GPU inference:
+
+```sh
+uv sync --locked --extra report
+uv run --no-sync python scripts/report_design_benchmark.py \
+  --run RECOVERED_RUN --data PREPARED_DATA --output NEW_REPORT_DIRECTORY
+```
+
+The report includes same-weight adjacent contrasts (whole JSON to serial fields,
+serial to batch fields, and batch to shared fields), separate engine comparisons,
+language/type breakdowns, raw failures, input token sizes, and scaling plots.
+Reporting-only source can advance after the measurement seal; the measurement
+source commit remains recorded in `seal.json` and every trial summary.
 
 The extra campaign budget is $100, including setup, unsuccessful attempts,
 storage, and recovery. Stop experiments before $90 and reserve $10 for recovery
