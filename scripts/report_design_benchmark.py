@@ -216,6 +216,7 @@ def main():
         "omitted.json",
         "seal.json",
         "schedule.json",
+        "admission.json",
         "base-model-integrity.json",
         "jsonllm-model-integrity.json",
     ):

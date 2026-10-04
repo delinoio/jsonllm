@@ -1,4 +1,10 @@
-from jsonllm.benchmark_schedule import admit_group, estimated_seconds, group_key, schedule
+from jsonllm.benchmark_schedule import (
+    admit_group,
+    development_timing,
+    estimated_seconds,
+    group_key,
+    schedule,
+)
 
 
 def test_fixed_order_repeats_and_complete_core():
@@ -24,3 +30,19 @@ def test_budget_exhaustion_cannot_select_later_cheap_conditions():
     assert admit_group(group, timings, manifest, 100)[0] is False
     assert admit_group(group, timings, manifest, 1000)[0] is True
     assert admit_group(group, timings, manifest, 1000, exhausted=True)[0] is False
+
+
+def test_expensive_server_setup_is_included_in_every_budget_admission():
+    timing = development_timing(
+        {
+            "records": 16,
+            "wall_seconds": 16,
+            "load_seconds": 80,
+            "warmup_seconds": 20,
+            "schema_preparation": {"seconds": 4},
+        },
+        server_startup=300,
+    )
+    assert timing["setup_seconds"] > 500
+    job = {"model": "base", "method": "vllm_json"}
+    assert estimated_seconds(job, {("base", "vllm_json"): timing}, 32) > 550

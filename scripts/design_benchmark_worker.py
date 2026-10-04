@@ -15,7 +15,7 @@ import httpx
 
 from jsonllm.artifacts import file_hash, verify_artifacts
 from jsonllm.benchmark_engine import METHODS
-from jsonllm.benchmark_schedule import admit_group, group_key, schedule
+from jsonllm.benchmark_schedule import admit_group, development_timing, group_key, schedule
 from jsonllm.io import write_json
 
 
@@ -197,6 +197,7 @@ class Worker:
         actual = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
         if actual != seal["source_commit"]:
             raise ValueError("Sealed source changed")
+        verify_artifacts(self.root, seal["development_evidence_sha256"])
         jobs = schedule(self.manifest)
         write_json(self.root / "schedule.json", jobs)
         timings = {}
@@ -205,8 +206,13 @@ class Worker:
                 s = json.loads(
                     (self.root / "trials" / f"dev-{model}-{method}" / "summary.json").read_text()
                 )
-                timings[(model, method)] = s["wall_seconds"] / s["records"]
+                server = self.root / f"dev-{model}-{method}-server.json"
+                startup = (
+                    json.loads(server.read_text())["startup_seconds"] if server.exists() else 0
+                )
+                timings[(model, method)] = development_timing(s, startup)
         omitted = []
+        admission = []
         exhausted = False
         for _, grouped in itertools.groupby(jobs, key=group_key):
             group = list(grouped)
@@ -217,6 +223,16 @@ class Worker:
                 self.args.deadline - time.time(),
                 exhausted=exhausted,
             )
+            admission.append(
+                {
+                    "group": group_key(group[0]),
+                    "jobs": len(group),
+                    "admitted": admitted,
+                    "estimated_seconds": estimate,
+                    "remaining_seconds": self.args.deadline - time.time(),
+                }
+            )
+            write_json(self.root / "admission.json", admission)
             if not admitted:
                 exhausted = True
                 omitted.extend(

@@ -109,8 +109,28 @@ def admit_group(group, timings, manifest, remaining, *, exhausted=False):
 
 
 def estimated_seconds(job, timings, count):
-    per_record = timings[(job["model"], job["method"])]
+    timing = timings[(job["model"], job["method"])]
+    if isinstance(timing, dict):
+        per_record = timing["seconds_per_record"]
+        setup = max(120, timing["setup_seconds"])
+    else:
+        per_record, setup = timing, 120
     records = min(count, job.get("limit", count))
     arrival = records / job["arrival_rate"] if job.get("arrival_rate") else 0
     # Include process/model/server startup and extra margin. No quality-dependent admission.
-    return 1.5 * max(per_record * records, arrival) + 120
+    return 1.5 * max(per_record * records, arrival) + setup
+
+
+def development_timing(summary, server_startup=0):
+    """Use only development timings, including preparation and server startup."""
+    return {
+        "seconds_per_record": summary["wall_seconds"] / summary["records"],
+        "setup_seconds": 1.25
+        * (
+            summary.get("load_seconds", 0)
+            + summary.get("warmup_seconds", 0)
+            + summary.get("schema_preparation", {}).get("seconds", 0)
+            + server_startup
+        )
+        + 15,
+    }
