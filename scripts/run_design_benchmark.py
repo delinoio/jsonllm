@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 
 from jsonllm.artifacts import file_hash
-from jsonllm.benchmark_engine import METHODS, VLLMJSON, WholeJSON
+from jsonllm.benchmark_engine import METHODS, VLLMJSON, WholeJSON, prepare_schemas
 from jsonllm.benchmark_measure import evaluate, measure
 from jsonllm.benchmark_prepare import prepare
 from jsonllm.gpu_telemetry import GpuTelemetry
@@ -50,74 +50,86 @@ def main():
         return
     loaded = time.perf_counter()
     telemetry = GpuTelemetry(args.output)
-    if args.method == "vllm_json":
-        backend = VLLMJSON(load_tokenizer(args.model, args.revision), args.url)
-    else:
-        from jsonllm.backends.shared_cuda import SharedPredictor
+    backend = None
+    try:
+        if args.method == "vllm_json":
+            backend = VLLMJSON(load_tokenizer(args.model, args.revision), args.url)
+        else:
+            from jsonllm.backends.shared_cuda import SharedPredictor
 
-        predictor = SharedPredictor.load(
-            args.model, args.revision, share=args.method == "shared_fields", bucket_choices=True
+            predictor = SharedPredictor.load(
+                args.model, args.revision, share=args.method == "shared_fields", bucket_choices=True
+            )
+            backend = WholeJSON(predictor) if args.method == "whole_json" else predictor
+        load_seconds = time.perf_counter() - loaded
+        schema_preparation = prepare_schemas(cases, args.method, backend)
+        warm = time.perf_counter()
+        warmup = [measure(case, args.method, backend) for case in read_jsonl(args.warmup_data)[:8]]
+        warmup_seconds = time.perf_counter() - warm
+        write_jsonl(args.output / "warmup.jsonl", warmup)
+        if args.method != "vllm_json":
+            import torch
+
+            torch.cuda.reset_peak_memory_stats()
+        rows, summary = evaluate(
+            cases,
+            args.method,
+            backend,
+            concurrency=args.concurrency,
+            arrival_rate=args.arrival_rate,
         )
-        backend = WholeJSON(predictor) if args.method == "whole_json" else predictor
-    load_seconds = time.perf_counter() - loaded
-    warm = time.perf_counter()
-    warmup = [measure(case, args.method, backend) for case in read_jsonl(args.warmup_data)[:8]]
-    warmup_seconds = time.perf_counter() - warm
-    write_jsonl(args.output / "warmup.jsonl", warmup)
-    if args.method != "vllm_json":
-        import torch
-
-        torch.cuda.reset_peak_memory_stats()
-    rows, summary = evaluate(
-        cases, args.method, backend, concurrency=args.concurrency, arrival_rate=args.arrival_rate
-    )
-    write_jsonl(args.output / "raw.jsonl", rows)
-    summary.update(telemetry.close())
-    summary.update(
-        status="complete",
-        model=args.model,
-        revision=args.revision,
-        method=args.method,
-        data_sha256=file_hash(args.data),
-        concurrency=args.concurrency,
-        arrival_rate=args.arrival_rate,
-        load_seconds=load_seconds,
-        warmup_seconds=warmup_seconds,
-        inference_dtype="float16",
-        pid=os.getpid(),
-        precision_note="Stored weights BF16; inference weights and buffers FP16",
-    )
-    if args.method != "vllm_json":
-        summary["peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
-        summary["peak_reserved_bytes"] = torch.cuda.max_memory_reserved()
-    else:
-        backend.close()
-    device = subprocess.run(
-        [
-            "nvidia-smi",
-            "--query-gpu=uuid,name,memory.used,utilization.gpu",
-            "--format=csv,noheader",
-        ],
-        capture_output=True,
-        text=True,
-    )
-    summary["device_after"] = device.stdout.strip()
-    summary["versions"] = {}
-    for package in ("torch", "transformers", "xgrammar", "vllm", "flash-linear-attention"):
-        try:
-            summary["versions"][package] = importlib.metadata.version(package)
-        except importlib.metadata.PackageNotFoundError:
-            pass
-    write_json(args.output / "summary.json", summary)
-    print(
-        json.dumps(
-            {
-                k: summary[k]
-                for k in ("status", "method", "records", "accuracy", "wall_seconds", "errors")
-            }
-        ),
-        flush=True,
-    )
+        write_jsonl(args.output / "raw.jsonl", rows)
+        summary.update(telemetry.close())
+        summary.update(
+            status="complete",
+            model=args.model,
+            revision=args.revision,
+            method=args.method,
+            data_sha256=file_hash(args.data),
+            concurrency=args.concurrency,
+            arrival_rate=args.arrival_rate,
+            load_seconds=load_seconds,
+            warmup_seconds=warmup_seconds,
+            schema_preparation=schema_preparation,
+            inference_dtype="float16",
+            pid=os.getpid(),
+            precision_note="Stored weights BF16; inference weights and buffers FP16",
+        )
+        if args.method != "vllm_json":
+            summary["peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
+            summary["peak_reserved_bytes"] = torch.cuda.max_memory_reserved()
+        else:
+            backend.close()
+        device = subprocess.run(
+            [
+                "nvidia-smi",
+                "--query-gpu=uuid,name,memory.used,utilization.gpu",
+                "--format=csv,noheader",
+            ],
+            capture_output=True,
+            text=True,
+        )
+        summary["device_after"] = device.stdout.strip()
+        summary["versions"] = {}
+        for package in ("torch", "transformers", "xgrammar", "vllm", "flash-linear-attention"):
+            try:
+                summary["versions"][package] = importlib.metadata.version(package)
+            except importlib.metadata.PackageNotFoundError:
+                pass
+        write_json(args.output / "summary.json", summary)
+        print(
+            json.dumps(
+                {
+                    k: summary[k]
+                    for k in ("status", "method", "records", "accuracy", "wall_seconds", "errors")
+                }
+            ),
+            flush=True,
+        )
+    finally:
+        telemetry.close()
+        if args.method == "vllm_json" and backend is not None:
+            backend.close()
 
 
 if __name__ == "__main__":

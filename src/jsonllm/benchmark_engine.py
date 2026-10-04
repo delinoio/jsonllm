@@ -11,6 +11,33 @@ from .schema import dependency_order, validate_questions, validate_value, value_
 METHODS = ("whole_json", "serial_fields", "batch_fields", "shared_fields", "vllm_json")
 
 
+def prepare_schemas(cases, method, backend):
+    """Prepare only schemas, never run test prompts or pass reference answers."""
+    started = time.perf_counter()
+    schemas = {
+        dumps(object_schema(inference_record(case))): inference_record(case) for case in cases
+    }
+    if method in {"whole_json", "vllm_json"}:
+        for record in schemas.values():
+            backend.prepare_schema(record)
+    else:
+        from .backends.scalar_grammar import ScalarGrammar
+
+        if backend.grammar is None:
+            backend.grammar = ScalarGrammar(
+                backend.tokenizer, backend.model.lm_head.weight.shape[0]
+            )
+        fields = {
+            dumps(value_schema(field)): field
+            for record in schemas.values()
+            for field in record["questions"].values()
+            if "enum" not in field
+        }
+        for field in fields.values():
+            backend.grammar.matcher(field)
+    return {"seconds": time.perf_counter() - started, "distinct_object_schemas": len(schemas)}
+
+
 def object_schema(record):
     return {
         "type": "object",
@@ -104,6 +131,11 @@ class WholeJSON:
         self.grammar = ScalarGrammar(predictor.tokenizer, predictor.model.lm_head.weight.shape[0])
         self.xgr = xgr
 
+    def prepare_schema(self, record):
+        return self.grammar.compiler.compile_json_schema(
+            object_schema(record), any_whitespace=False
+        )
+
     def infer(self, record, max_tokens, deadline=None):
         import torch
 
@@ -111,9 +143,7 @@ class WholeJSON:
         ids = whole_prompt(record, predictor.tokenizer)
         if len(ids) + max_tokens > predictor.max_length:
             raise ValueError("overlength")
-        compiled = self.grammar.compiler.compile_json_schema(
-            object_schema(record), any_whitespace=False
-        )
+        compiled = self.prepare_schema(record)
         matcher = self.xgr.GrammarMatcher(compiled, terminate_without_stop_token=False)
         mask = self.grammar.allocate(1, predictor.device)
         waited = time.perf_counter()
@@ -158,6 +188,22 @@ class VLLMJSON:
         self.client = httpx.Client(
             base_url=url, timeout=180, limits=httpx.Limits(max_connections=256)
         )
+
+    def prepare_schema(self, record):
+        # The public API has no compile-only operation. A one-token dummy request
+        # primes the grammar cache, without test facts or reusable prefix state.
+        response = self.client.post(
+            "/v1/completions",
+            json={
+                "model": "jsonllm",
+                "prompt": "Return JSON.",
+                "temperature": 0,
+                "max_tokens": 1,
+                "cache_salt": uuid.uuid4().hex,
+                "structured_outputs": {"json": object_schema(record)},
+            },
+        )
+        response.raise_for_status()
 
     def infer(self, record, max_tokens, deadline=None):
         ids = whole_prompt(record, self.tokenizer)

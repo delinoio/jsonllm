@@ -6,6 +6,7 @@ import subprocess
 
 class GpuTelemetry:
     def __init__(self, output):
+        self.summary = None
         self.path = output / "gpu-memory.csv"
         self.stream = self.path.open("w")
         self.errors = (output / "gpu-memory-errors.txt").open("w")
@@ -21,6 +22,8 @@ class GpuTelemetry:
         )
 
     def close(self):
+        if self.summary is not None:
+            return self.summary
         if self.process.poll() is None:
             self.process.terminate()
             try:
@@ -30,7 +33,8 @@ class GpuTelemetry:
                 self.process.wait(timeout=5)
         self.stream.close()
         self.errors.close()
-        return memory_summary(self.path)
+        self.summary = memory_summary(self.path)
+        return self.summary
 
 
 def memory_summary(path):

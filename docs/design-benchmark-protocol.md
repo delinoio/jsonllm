@@ -70,7 +70,11 @@ nested tree; that additional application experiment remains unperformed.
 Core test records run five times per model and method. Sweep records run three
 times. Repeated timings are not additional independent quality samples. The
 method and model order rotates across core repeats. Warmup uses development
-records only. Loading, server startup, and warmup costs are reported separately.
+records only. Loading, server startup, schema preparation, and warmup costs are
+reported separately. Eager grammars are compiled before timing. vLLM schemas are
+primed through one-token dummy requests because its HTTP API has no compile-only
+operation. Those requests contain no test facts and use fresh cache salts. Their
+total preparation time includes the dummy inference and HTTP overhead.
 
 Latency includes input formatting, inference, parsing, and validation. It includes
 failures, not just successful outputs. `first_usable_seconds` is the internal time

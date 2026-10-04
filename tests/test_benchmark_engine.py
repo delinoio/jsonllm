@@ -4,7 +4,12 @@ import pytest
 from jsonschema.exceptions import ValidationError
 
 from jsonllm.benchmark_data import make_case
-from jsonllm.benchmark_engine import field_inference, object_schema, validate_object
+from jsonllm.benchmark_engine import (
+    field_inference,
+    object_schema,
+    prepare_schemas,
+    validate_object,
+)
 from jsonllm.benchmark_measure import measure, summarize
 
 
@@ -76,3 +81,18 @@ def test_schema_rejects_extra_missing_and_wrong_value():
     for result in ({}, row["answers"] | {"extra": 1}, {"f0": "not-in-enum"}):
         with pytest.raises((ValueError, ValidationError)):
             validate_object(row, result)
+
+
+def test_schema_preparation_deduplicates_and_does_not_receive_oracle():
+    class Compiler:
+        def __init__(self):
+            self.records = []
+
+        def prepare_schema(self, record):
+            assert set(record) == {"id", "context", "questions"}
+            self.records.append(record)
+
+    row = make_case("dev", 0, width=1)
+    backend = Compiler()
+    result = prepare_schemas([row, row], "whole_json", backend)
+    assert len(backend.records) == result["distinct_object_schemas"] == 1
