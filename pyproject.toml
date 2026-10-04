@@ -13,6 +13,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = ["httpx>=0.28,<0.29", "jsonschema>=4.26,<5", "pyyaml>=6,<7"]
 
 [project.optional-dependencies]
+report = ["matplotlib==3.10.8"]
 mlx = ["mlx-lm==0.31.3; sys_platform == 'darwin' and platform_machine == 'arm64'", "transformers==5.17.0"]
 cuda = ["torch==2.14.0", "transformers==5.17.0", "peft==0.21.0", "accelerate==1.15.0", "flash-linear-attention==0.5.2; sys_platform == 'linux'", "xgrammar==0.2.6"]
 
