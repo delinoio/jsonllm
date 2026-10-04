@@ -1,0 +1,16 @@
+model: Qwen/Qwen3.5-4B
+revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+backend: cuda
+prompt_version: shared-context-v3
+data: models/JSONLLM-Qwen3.5-4B-v0.1/data/prepared
+output: runs/jsonllm-qwen35-4b-v01
+rank: 16
+alpha: 32
+learning_rate: 0.00005
+max_length: 2048
+batch_size: 1
+gradient_accumulation: 8
+epochs: 1
+seed: 42
+save_steps: 100
+gradient_checkpointing: true

@@ -1,0 +1,11 @@
+JSONLLM
+Copyright 2026 JSONLLM contributors
+
+Based on the authors' TypeLLM Model research implementation, source commit
+1be7e10281bfcf87149b44e3168c45cd51febecd. The package was renamed and
+release-specific interfaces and documentation were added.
+
+Inspired by TypeLLM (https://github.com/TypeLLM/TypeLLM).
+Model weights derive from Qwen/Qwen3.5-4B under Apache License 2.0.
+Training data was generated through the official DeepSeek provider on OpenRouter.
+These references describe provenance, not sponsorship or endorsement.

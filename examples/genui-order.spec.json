@@ -1,0 +1,48 @@
+{
+  "version": "genui-v1",
+  "components": ["OrderSummary", "EditAddress", "CancelOrder", "EmptyState"],
+  "registry": {
+    "OrderSummary": {"purpose": "Inspect an existing order without changing it."},
+    "EditAddress": {"purpose": "Change the shipping address of an existing order."},
+    "CancelOrder": {"purpose": "Ask for order cancellation; require confirmation before executing."}
+  },
+  "decisions": {
+    "component": {
+      "type": ["string", "null"],
+      "enum": ["OrderSummary", "EditAddress", "CancelOrder", null],
+      "instructions": "Choose the component matching the requested operation. Use null for unsupported intent.",
+      "when": {"op": "eq", "args": [{"path": "event.type"}, "user"]},
+      "otherwise": {"path": "state.selection"}
+    },
+    "urgent": {
+      "type": "boolean",
+      "instructions": "Does the user explicitly require urgent action? Respect negation.",
+      "when": {"op": "eq", "args": [{"path": "event.type"}, "user"]},
+      "otherwise": false
+    }
+  },
+  "before": [
+    {"when": {"op": "eq", "args": [{"path": "event.type"}, "reset"]},
+     "set": {"selection": null, "phase": "idle", "total": 0}},
+    {"when": {"op": "and", "args": [
+      {"op": "eq", "args": [{"path": "event.type"}, "response"]},
+      {"op": "eq", "args": [{"path": "event.request_id"}, {"path": "facts.request_id"}]}]},
+     "set": {"phase": "ready"}}
+  ],
+  "after": [
+    {"when": {"op": "eq", "args": [{"path": "event.type"}, "user"]},
+     "set": {"selection": {"path": "decisions.component"}, "phase": "selected",
+      "total": {"op": "mul", "args": [{"path": "facts.unit_price"}, {"path": "facts.quantity"}]}}}
+  ],
+  "view": {
+    "component": {"if": {"op": "eq", "args": [{"path": "state.selection"}, null]},
+                  "then": "EmptyState", "else": {"path": "state.selection"}},
+    "props": {
+      "title": {"template": "Order {order}", "values": {"order": {"path": "facts.order_id"}}},
+      "shipping_address": {"path": "facts.shipping_address"},
+      "total": {"path": "state.total"},
+      "urgent": {"path": "decisions.urgent"},
+      "requires_confirmation": {"op": "eq", "args": [{"path": "state.selection"}, "CancelOrder"]}
+    }
+  }
+}

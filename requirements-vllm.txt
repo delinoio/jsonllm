@@ -1,0 +1,2 @@
+# Install in a separate environment; do not combine with the training CUDA lock.
+vllm==0.30.0
