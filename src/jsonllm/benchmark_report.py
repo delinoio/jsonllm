@@ -170,6 +170,13 @@ def aggregate_trials(trials):
                 if r["metrics"].get("lock_wait_seconds") is not None
             ]
         )
+        result["server_queue_ms"] = distribution(
+            [
+                r["metrics"]["server_timing"]["queue_time_ms"]
+                for r in rows
+                if (r["metrics"].get("server_timing") or {}).get("queue_time_ms") is not None
+            ]
+        )
         result["common_token_evaluations_per_record"] = span(
             r["metrics"]["model"]["common_token_evaluations"]
             for r in rows

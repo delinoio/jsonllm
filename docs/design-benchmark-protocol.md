@@ -95,6 +95,13 @@ when a validated field wave becomes available; whole-object methods expose only
 the completed object. This is not browser rendering latency or network streaming
 time. The existing public UI API still returns its final output atomically.
 
+The vLLM server enables its [per-request timing metrics](https://docs.vllm.ai/en/latest/features/per_request_metrics/)
+to record scheduler queue time. This telemetry can add CPU overhead and is part
+of the measured server configuration. Missing server timing is reported as
+missing, never as zero. Client dispatch queueing, JSONLLM's lock wait, and vLLM's
+scheduler queueing are distinct measurements. The vLLM baseline uses the official
+[JSON Schema structured-output interface](https://docs.vllm.ai/en/latest/features/structured_outputs/).
+
 The report gives p50/p95/p99, five-trial medians and ranges, complete outputs per
 second, **correct complete outputs per second**, exact accuracy, schema validity,
 failures, timeouts, output tokens, and memory. Token totals can be incomplete for

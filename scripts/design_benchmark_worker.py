@@ -84,6 +84,7 @@ class Worker:
             "8000",
             "--generation-config",
             "vllm",
+            "--enable-per-request-metrics",
             "--seed",
             "42",
         ]

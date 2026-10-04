@@ -289,6 +289,7 @@ class VLLMJSON:
             "output_tokens": body["usage"]["completion_tokens"],
             "input_tokens": body["usage"]["prompt_tokens"],
             "lock_wait_seconds": None,
+            "server_timing": body.get("metrics"),
         }
 
     def close(self):
