@@ -24,7 +24,9 @@ class LazyCUDA:
             from .backends.shared_cuda import SharedPredictor
 
             started = time.perf_counter()
-            self.loaded = SharedPredictor.load(self.model, self.revision, share=self.share)
+            self.loaded = SharedPredictor.load(
+                self.model, self.revision, share=self.share, bucket_choices=True
+            )
             self.load_seconds = time.perf_counter() - started
         return self.loaded.open_record(context, count)
 

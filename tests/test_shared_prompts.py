@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -14,7 +15,7 @@ from jsonllm.prompts import (
 
 @pytest.mark.tokenizer
 def test_qwen_shared_boundary_and_parent_isolation():
-    path = Path("runs/speed-20260928-v1/merged-4b")
+    path = Path(os.environ.get("JSONLLM_TEST_TOKENIZER", "models/JSONLLM-Qwen3.5-4B-v0.1"))
     if not path.exists():
         pytest.skip("Local pinned Qwen tokenizer absent")
     from transformers import AutoTokenizer

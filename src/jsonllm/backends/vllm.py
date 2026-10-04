@@ -50,7 +50,7 @@ class Predictor:
         labels = list(example["choices"])
         candidate_ids = [self.tokenizer.encode(s, add_special_tokens=False)[0] for s in labels]
         payload = {
-            "model": "typellm",
+            "model": "jsonllm",
             "prompt": ids,
             "temperature": 0.0,
             "max_tokens": 1 if labels else max_tokens,

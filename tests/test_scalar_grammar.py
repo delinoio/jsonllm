@@ -12,7 +12,7 @@ pytest.importorskip("xgrammar")
 
 @pytest.fixture(scope="module")
 def tokenizer():
-    path = Path(os.environ.get("TYPELLM_TEST_TOKENIZER", "runs/speed-20260928-v1/merged-4b"))
+    path = Path(os.environ.get("JSONLLM_TEST_TOKENIZER", "models/JSONLLM-Qwen3.5-4B-v0.1"))
     if not path.exists():
         pytest.skip("Requires local pinned Qwen tokenizer")
     return load_tokenizer(str(path), "main")
