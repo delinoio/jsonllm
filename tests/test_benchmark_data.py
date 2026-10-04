@@ -48,6 +48,23 @@ def test_fresh_reproducible_splits_and_balance():
     assert not {r["context"] for r in data["dev"]} & {r["context"] for r in data["core"]}
 
 
+def test_scaling_axes_do_not_change_source_pool_and_field_count_together():
+    data = suite()
+    for level in (1, 4, 8, 16):
+        row = data[f"scale-width-{level}"][0]
+        assert len(row["questions"]) == level
+        assert len(row["source"]["entries"]) == 16
+        assert row["condition"]["context_tokens"] == 512
+    for level in (2, 4, 8, 16):
+        row = data[f"scale-choices-{level}"][0]
+        assert len(row["questions"]) == 4
+        assert len(row["source"]["entries"]) == 16
+    for level in (8, 32, 96):
+        row = data[f"scale-text_words-{level}"][0]
+        assert len(row["questions"]) == 1
+        assert row["condition"]["context_tokens"] == 512
+
+
 @pytest.mark.parametrize("kind", ["tree", "workflow"])
 def test_topology_oracle_and_invalid_reference(kind):
     row = topology_case(kind, 3)

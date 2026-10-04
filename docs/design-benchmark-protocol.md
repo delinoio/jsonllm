@@ -49,6 +49,16 @@ are never truncated to fit a nominal size. Reports include actual token counts.
 String-length levels are generated from approximately single-token English
 words; reports use measured answer-token lengths, not word counts as tokens.
 
+The field-count sweep holds 16 source entries, four choices, and approximately
+512 common-context tokens fixed. The choice-count sweep holds 16 entries, four
+fields, and approximately 512 context tokens fixed. The string-length sweep
+uses one field, four source entries, and approximately 512 context tokens. This
+avoids increasing field width or common-context size along with answer length.
+The context sweep uses four source entries and eight independent fields. The
+dependency-depth sweep holds eight fields fixed and changes the number of waves.
+Token-boundary padding can overshoot a context target slightly; actual counts
+are retained for every record. All these choices precede test inference.
+
 Before GPU inference, the preparer checks every method's prompt and reserved
 output length. An overlength record is excluded from all compared methods, with
 its reason retained. Whole-JSON output allowance is 1.25 times the reference

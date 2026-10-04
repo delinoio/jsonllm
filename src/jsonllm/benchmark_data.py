@@ -44,12 +44,17 @@ def reference(case):
     return result
 
 
-def make_case(split, index, *, kind=None, width=8, depth=4, choices=4, text_words=8):
+def make_case(
+    split, index, *, kind=None, width=8, depth=4, choices=4, text_words=8, pool_size=None
+):
     kind = kind or KINDS[(index // 2) % len(KINDS)]
     seed = int.from_bytes(hashlib.sha256(f"{SEED}:{split}:{index}".encode()).digest()[:8])
     rng = random.Random(seed)
     language = "en" if index % 2 == 0 else "ko"
-    keys = [f"item_{i}" for i in range(max(width, choices))]
+    pool_size = max(width, choices) if pool_size is None else pool_size
+    if pool_size < choices:
+        raise ValueError("Source pool must contain all requested choices")
+    keys = [f"item_{i}" for i in range(pool_size)]
     scores = rng.sample(range(100, 999), len(keys))
     entries = [
         {
@@ -239,11 +244,23 @@ def suite():
                 if axis == "depth"
                 else ("string" if axis == "text_words" else "choice")
             )
+            # Keep source size fixed when varying fields or choices. For string
+            # length, one field and padded context separate decode length from width.
+            if axis == "width":
+                options["pool_size"] = 16
+            elif axis == "choices":
+                options.update(pool_size=16, width=4)
+            elif axis == "context_tokens":
+                options["pool_size"] = 4
+            elif axis == "text_words":
+                options.update(width=1, pool_size=4)
             result[name] = [make_case(name, i, **options) for i in range(32)]
             for row in result[name]:
                 row["condition"].update(axis=axis, level=level)
                 if axis == "context_tokens":
                     row["condition"]["context_tokens"] = level
+                elif axis in {"width", "choices", "text_words"}:
+                    row["condition"]["context_tokens"] = 512
     for kind in ("tree", "workflow"):
         result[kind] = [topology_case(kind, i) for i in range(64)]
     result["application"] = [make_case("application", i) for i in range(64)]
