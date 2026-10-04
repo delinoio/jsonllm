@@ -19,6 +19,9 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
     )
     write_json(run / "base-gate.json", {"status": "passed"})
     write_json(run / "private-key.json", {"secret": "must-not-export"})
+    (run / "gpu-environment.txt").write_text(
+        "Driver Version : fixture-driver\nGPU UUID : private-id\nProduct Name : fixture-gpu\n"
+    )
     invalid = run / "invalidated" / "fixture"
     invalid.mkdir(parents=True)
     write_json(invalid / "reason.json", {"reason": "fixture environment failure"})
@@ -53,7 +56,12 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
         )
         write_json(
             trial / "summary.json",
-            summarize([row], 1) | {"model": "/private/local/path", "pid": 42},
+            summarize([row], 1)
+            | {
+                "model": "/private/local/path",
+                "pid": 42,
+                "device_after": "GPU-private-id, fixture-gpu, 8000 MiB, 0 %",
+            },
         )
     script = Path(__file__).parents[1] / "scripts/report_design_benchmark.py"
     subprocess.run(
@@ -77,10 +85,14 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
         assert json.loads(stream.readline())["error"]["message"] == "fixture"
     public_summary = (output / "raw/whole_json.summary.json").read_text()
     assert "/private/local/path" not in public_summary and '"pid"' not in public_summary
+    assert "GPU-private-id" not in public_summary and "fixture-gpu" in public_summary
     assert (output / "evidence/environment-cuda.txt").read_text() == "torch==2.14.0\n"
     assert json.loads((output / "evidence/base-gate.json").read_text())["status"] == "passed"
     invalidated = json.loads((output / "evidence/invalidated.json").read_text())
     assert invalidated[0]["retained_local_files"]["private.log"]["bytes"] > 0
     assert not list(output.rglob("private-key.json"))
     assert not list(output.rglob("private.log"))
+    hardware = (output / "evidence/hardware.json").read_text()
+    assert "fixture-driver" in hardware and "fixture-gpu" in hardware
+    assert "private-id" not in hardware
     verify_artifacts(output, json.loads((output / "artifacts.json").read_text()))

@@ -23,6 +23,9 @@ def provenance(run, output):
         "costs.json",
         "recovery-verification.json",
         "validation.json",
+        "schema-preflight.json",
+        "tokenizer-preflight.json",
+        "development-repair.json",
     ):
         if (run / name).exists():
             shutil.copy2(run / name, evidence / name)
@@ -35,6 +38,21 @@ def provenance(run, output):
                 if "==" in line and " @ " not in line and not line.startswith("-e")
             ]
             (evidence / name).write_text("\n".join(versions) + "\n")
+    hardware = run / "gpu-environment.txt"
+    if hardware.exists():
+        fields = {}
+        for line in hardware.read_text().splitlines():
+            name, separator, value = line.strip().partition(":")
+            name = name.strip()
+            if separator and name in {"Driver Version", "CUDA Version", "Product Name"}:
+                fields.setdefault(name, value.strip())
+        write_json(
+            evidence / "hardware.json",
+            {
+                "fields": fields,
+                "private_inventory_sha256": file_hash(hardware),
+            },
+        )
     invalidated = []
     for path in sorted((run / "invalidated").glob("*/reason.json")):
         invalidated.append(
@@ -202,6 +220,8 @@ def main():
         summary = json.loads((path / "summary.json").read_text())
         summary["model"] = job["model"]  # Do not publish machine-local model paths.
         summary.pop("pid", None)
+        if str(summary.get("device_after", "")).startswith("GPU-"):
+            summary["device_after"] = summary["device_after"].partition(",")[2].strip()
         rows = read_jsonl(path / "raw.jsonl")
         trials.append({"job": job, "summary": summary, "rows": rows})
         with (raw_dir / (path.name + ".jsonl.gz")).open("wb") as stream:
