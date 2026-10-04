@@ -1,6 +1,7 @@
 import pytest
 
-from jsonllm.benchmark_report import paired_comparison, quality
+from jsonllm.benchmark_measure import summarize
+from jsonllm.benchmark_report import aggregate_trials, paired_comparison, quality
 
 
 def row(name, *, correct=True, latency=1):
@@ -45,3 +46,52 @@ def test_repeat_instability_is_preserved_in_conservative_loss_bound():
     result = paired_comparison(candidate, [row("a")] * 2, draws=100)
     assert result["accuracy_delta"] == -0.5
     assert not result["point_quality_gate"]
+
+
+def test_adjacent_contrasts_and_terminal_valid_correct_throughput_are_distinct():
+    trials = []
+    for method in ("whole_json", "serial_fields", "batch_fields", "shared_fields", "vllm_json"):
+        rows = []
+        for i, language in enumerate(("en", "ko")):
+            r = row(str(i), correct=i == 0)
+            r.update(
+                kind="choice",
+                language=language,
+                first_usable_seconds=0.5,
+                dispatch_queue_seconds=0,
+                metrics={},
+            )
+            if method == "whole_json" and i == 1:
+                r.update(
+                    schema_valid=False,
+                    error={"type": "ReadTimeout", "message": "", "timeout": True},
+                )
+            rows.append(r)
+        trials.append(
+            {
+                "job": {
+                    "stage": "core",
+                    "group": "core",
+                    "model": "base",
+                    "method": method,
+                    "concurrency": 1,
+                },
+                "summary": summarize(rows, 2),
+                "rows": rows,
+            }
+        )
+    result = aggregate_trials(trials)
+    contrasts = {(c["candidate"], c["baseline"]) for c in result["paired_comparisons"]}
+    assert ("serial_fields", "whole_json") in contrasts
+    assert ("batch_fields", "serial_fields") in contrasts
+    assert ("shared_fields", "batch_fields") in contrasts
+    groups = {g["method"]: g for g in result["groups"]}
+    whole = groups["whole_json"]
+    assert whole["quality"]["timeouts"] == 1
+    assert whole["valid_completion_fraction"] == 0.5
+    assert whole["trial_metrics"]["completed_records_per_second"]["median"] == 1
+    assert whole["valid_records_per_second"]["median"] == 0.5
+    serial = groups["serial_fields"]
+    assert serial["valid_records_per_second"]["median"] == 1
+    assert serial["trial_metrics"]["correct_records_per_second"]["median"] == 0.5
+    assert serial["by_language"]["ko"]["quality"]["unique_records"] == 1

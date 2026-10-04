@@ -35,6 +35,7 @@ def quality(rows):
         "stable_accuracy_wilson_95": wilson(stable, len(clusters)),
         "schema_accuracy": statistics.mean(r["schema_valid"] for r in rows),
         "errors": sum(r["error"] is not None for r in rows),
+        "timeouts": sum(bool((r["error"] or {}).get("timeout")) for r in rows),
         "graph_invalid": sum(r["graph_valid"] is False for r in rows),
     }
 
@@ -137,21 +138,39 @@ def aggregate_trials(trials):
         result["latency_ms"] = {
             p: span(s["latency_ms"][p] for s in summaries) for p in ("p50", "p95", "p99")
         }
-        result["by_kind"] = {}
-        for kind in sorted({r["kind"] for r in rows}):
-            selected = [r for r in rows if r["kind"] == kind]
-            result["by_kind"][kind] = {
-                "quality": quality(selected),
-                "latency_ms": {
-                    p: span(
-                        distribution(
-                            [r["latency_seconds"] * 1000 for r in t["rows"] if r["kind"] == kind]
-                        )[p]
-                        for t in items
-                    )
-                    for p in ("p50", "p95", "p99")
-                },
-            }
+        result["valid_records_per_second"] = span(
+            sum(r["schema_valid"] and r["graph_valid"] is not False for r in t["rows"])
+            / t["summary"]["wall_seconds"]
+            for t in items
+        )
+        result["valid_completion_fraction"] = statistics.mean(
+            r["schema_valid"] and r["graph_valid"] is not False for r in rows
+        )
+        result["throughput_note"] = (
+            "completed_records_per_second counts terminal attempts, including failures; "
+            "valid_records_per_second requires a valid complete output; "
+            "correct_records_per_second additionally requires the exact oracle answer."
+        )
+        for field in ("kind", "language"):
+            result["by_" + field] = {}
+            for value in sorted({r[field] for r in rows}):
+                selected = [r for r in rows if r[field] == value]
+                result["by_" + field][value] = {
+                    "quality": quality(selected),
+                    "latency_ms": {
+                        p: span(
+                            distribution(
+                                [
+                                    r["latency_seconds"] * 1000
+                                    for r in t["rows"]
+                                    if r[field] == value
+                                ]
+                            )[p]
+                            for t in items
+                        )
+                        for p in ("p50", "p95", "p99")
+                    },
+                }
         result["first_usable_ms"] = {
             p: span(s["first_usable_ms"].get(p) for s in summaries) for p in ("p50", "p95", "p99")
         }
@@ -189,9 +208,15 @@ def aggregate_trials(trials):
     comparisons = []
     for key, rows in rows_by_key.items():
         stage, group, model, method, concurrency, rate = key
-        if method != "shared_fields" or stage == "development":
+        if stage == "development":
             continue
-        for baseline_method in ("whole_json", "serial_fields", "batch_fields", "vllm_json"):
+        baselines = {
+            "serial_fields": ("whole_json",),
+            "batch_fields": ("serial_fields",),
+            "shared_fields": ("whole_json", "serial_fields", "batch_fields", "vllm_json"),
+            "vllm_json": ("whole_json",),
+        }.get(method, ())
+        for baseline_method in baselines:
             baseline_key = (stage, group, model, baseline_method, concurrency, rate)
             if baseline_key not in rows_by_key:
                 continue
@@ -202,6 +227,9 @@ def aggregate_trials(trials):
                     "model": model,
                     "candidate": method,
                     "baseline": baseline_method,
+                    "comparison_scope": "practical engine comparison"
+                    if "vllm_json" in (method, baseline_method)
+                    else "matched eager execution comparison",
                     "concurrency": concurrency,
                     "arrival_rate": rate,
                     **paired_comparison(rows, rows_by_key[baseline_key]),
