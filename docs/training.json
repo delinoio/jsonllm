@@ -1,0 +1,67 @@
+{
+  "config": {
+    "model": "Qwen/Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    "backend": "cuda",
+    "data": "data/prepared",
+    "output": "a new local run directory",
+    "rank": 16,
+    "alpha": 32,
+    "learning_rate": 5e-05,
+    "max_length": 2048,
+    "batch_size": 1,
+    "gradient_accumulation": 8,
+    "epochs": 1,
+    "seed": 42,
+    "save_steps": 100,
+    "max_steps": null,
+    "gradient_checkpointing": true,
+    "prompt_version": "shared-context-v3"
+  },
+  "model": {
+    "repo": "Qwen/Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+  },
+  "prompt_version": "shared-context-v3",
+  "dataset_hashes": {
+    "train": "6adeabc6839dc143c088a9df977b963357b1d527c5739392a006e7792a32616e",
+    "validation": "8f359d2b0f8caee2b5d708320cab9ce5968e4e0ee9addde57870781ad884662b"
+  },
+  "retained": {
+    "train": 15619,
+    "validation": 1946
+  },
+  "excluded_overlength": {
+    "train": [],
+    "validation": []
+  },
+  "resume": null,
+  "warm_start": null,
+  "versions": {
+    "typellm-model": "0.1.0",
+    "transformers": "5.17.0",
+    "torch": "2.14.0",
+    "peft": "0.21.0",
+    "accelerate": "1.15.0",
+    "flash-linear-attention": "0.5.2",
+    "fla-core": "0.5.2",
+    "triton": "3.8.0"
+  },
+  "status": "complete",
+  "metrics": {
+    "train_runtime": 6142.433,
+    "train_samples_per_second": 2.543,
+    "train_steps_per_second": 0.318,
+    "total_flos": 1.6864612659356467e+17,
+    "train_loss": 0.04880011581513414,
+    "epoch": 1.0,
+    "eval_loss": 0.013243947178125381,
+    "eval_runtime": 128.3218,
+    "eval_samples_per_second": 15.165,
+    "eval_steps_per_second": 15.165
+  },
+  "source_commit": "1be7e10281bfcf87149b44e3168c45cd51febecd",
+  "optimizer_steps": 1953,
+  "stored_dtype": "bfloat16",
+  "shared_inference_dtype": "float16"
+}

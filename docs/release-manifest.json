@@ -1,0 +1,119 @@
+{
+  "version": "jsonllm-release-manifest-v1",
+  "algorithm": "sha256",
+  "scope": "All packaged files except manifest.json; HF-generated .gitattributes and local download cache are not payload files.",
+  "files": {
+    "LICENSE": {
+      "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+      "bytes": 11544
+    },
+    "NOTICE": {
+      "sha256": "84d4014bf842183aa669dd3dd7555b096b7e66c2f1855fe31d9dde82e730fd66",
+      "bytes": 527
+    },
+    "README.md": {
+      "sha256": "642bea1c58ec1731fe432ee6eac2a9aec0d338939439b1490e11e83a4081e3f6",
+      "bytes": 6460
+    },
+    "adapter/README.md": {
+      "sha256": "90c4dd38b0a348117732a6a8cf2386d8a9cfdd1367e9f5f2f1660e1326600884",
+      "bytes": 455
+    },
+    "adapter/adapter_config.json": {
+      "sha256": "534249ec16c1b9120b4afc711bcb8774be279915e7a2473559c803be637891b0",
+      "bytes": 1294
+    },
+    "adapter/adapter_model.safetensors": {
+      "sha256": "9896496bfbd28cfba3f8386b7eec86943f41047768ce4bf02a76c4c0428308fe",
+      "bytes": 129927008
+    },
+    "chat_template.jinja": {
+      "sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+      "bytes": 7756
+    },
+    "config.json": {
+      "sha256": "63f47812d0f11118e4d252d2b3ad488707eb9287a11589f4fd382a1d31182724",
+      "bytes": 1979
+    },
+    "data/LICENSE": {
+      "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+      "bytes": 11544
+    },
+    "data/README.md": {
+      "sha256": "c450c12a5dcd776547fc2c1041c85743d3116f4cb425e4775ec07e28124d9e5f",
+      "bytes": 3215
+    },
+    "data/SHA256SUMS": {
+      "sha256": "5b352e865c8e6b242249e5ab6b4350b5e7bd07893a430dbfa99c9520984b9cf5",
+      "bytes": 417
+    },
+    "data/prepared/train.jsonl": {
+      "sha256": "f73a96dc1a92b5b5e149208f9264d431e358acfe433eec103df1744a137f38fd",
+      "bytes": 40244961
+    },
+    "data/prepared/validation.jsonl": {
+      "sha256": "990d26d29f7d5b6872ffc2a9f830f794ebc0cd55a5e6f21b4b8981efebc08a59",
+      "bytes": 5067190
+    },
+    "data/splits.json": {
+      "sha256": "3995c228ac416dd7cbbd78dc7aabf3ffebc575babce096d0b3c195ca270c99f9",
+      "bytes": 1566
+    },
+    "data/test.jsonl": {
+      "sha256": "7e87f258b761f660911724966bc937a6208119c9f31ca91a307dc14b3cfd1cd4",
+      "bytes": 5985272
+    },
+    "data/train.jsonl": {
+      "sha256": "23450c885ca4d50d44d6c887ee137794db0ce3fdc772031373260c0a7990998f",
+      "bytes": 47427192
+    },
+    "data/validation.jsonl": {
+      "sha256": "9b8171c267137b9bd62e6882c381d12ef8c0ec268e26c8b1c30000d5a6d78fec",
+      "bytes": 5989712
+    },
+    "docs/benchmark-plan.md": {
+      "sha256": "242c3844d9e9cf3bdee86fb6983be2a9c3bc4ebb60f79d95479110c52096310f",
+      "bytes": 1651
+    },
+    "docs/evaluation.json": {
+      "sha256": "66b629ade6ed72a4d67a7f32feb55c082ad7caaec586b675cc1e8d9d6d61aee3",
+      "bytes": 108723
+    },
+    "docs/evaluation.md": {
+      "sha256": "a620d35444f65f16e413db287abdf5dcce4a75c3a87970386ac329f8eedda90f",
+      "bytes": 8107
+    },
+    "docs/provenance.json": {
+      "sha256": "901c863b287445859b3f34fae62912c6eb56245a7be64a0d12bc90add7657590",
+      "bytes": 2752
+    },
+    "docs/provenance.md": {
+      "sha256": "aa290cce74cc32684905c616b7255d5d272d5d8d90f2485b9d6a26bef54f2954",
+      "bytes": 3035
+    },
+    "docs/training-config.yaml": {
+      "sha256": "c2f0e6092e953d2dddd57621c569935c90c8de721379d2c705f47ca6bd2861ff",
+      "bytes": 370
+    },
+    "docs/training.json": {
+      "sha256": "f915ef37fd93f0fc76b26687199472eb435fcd9727e297efb7ce4ab676815e53",
+      "bytes": 1813
+    },
+    "generation_config.json": {
+      "sha256": "62153eb6c69f2e1f426beaa8002b7186437e949c7588167085df14e10e9c0a73",
+      "bytes": 116
+    },
+    "model.safetensors": {
+      "sha256": "3ee9a015cec965261b103ceb0fd469eb24fb45aadbb0f0c0aaae9d2c9c1c1b10",
+      "bytes": 8411558400
+    },
+    "tokenizer.json": {
+      "sha256": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+      "bytes": 19989325
+    },
+    "tokenizer_config.json": {
+      "sha256": "9cf04fffe3d8c3b85e439fb35c7acad0761ab51c422a8c4256d9f887c3a0be7d",
+      "bytes": 1125
+    }
+  }
+}

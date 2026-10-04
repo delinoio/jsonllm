@@ -1,0 +1,3002 @@
+{
+  "version": "jsonllm-evaluation-v0.1",
+  "experiment_date": "2026-10-04",
+  "status": "completed historical experiment",
+  "methodology": {
+    "hardware": "one NVIDIA H100 80 GB",
+    "runtime": "shared-context-v3",
+    "stored_dtype": "bfloat16",
+    "inference_dtype": "float16",
+    "compile_mode": "eager",
+    "bucket_choices": true,
+    "max_tokens": 128,
+    "context_limit": 2048,
+    "test_records_per_trial": 1000,
+    "model_records_per_trial": 800,
+    "code_records_per_trial": 200,
+    "unique_test_groups": 100,
+    "repetitions_per_model_per_concurrency": 5,
+    "concurrency": [
+      1,
+      8
+    ],
+    "baseline": "original weights under the same custom runtime",
+    "factual_judgment": "accepted synthetic reference or blind teacher review; not independent real-world truth",
+    "latency_scope": "model records, including queue/lock wait, output assembly and validation; excludes load, warmup, review API, transport and rendering",
+    "throughput_scope": "all completed records, including deterministic code records"
+  },
+  "stages": {
+    "validation": {
+      "lr5e5-v3-shared": {
+        "quality": {
+          "records": 1000,
+          "model_records": 800,
+          "unique_model_records": 800,
+          "code_records": 200,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 0.99875,
+          "component_accuracy": 1.0,
+          "copy_accuracy": 0.99875,
+          "state_accuracy": 1.0,
+          "factual_accuracy": 1.0,
+          "trajectory_accuracy": 0.99,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 800,
+            "mean": 507.42794089601375,
+            "p50": 240.61405193060637,
+            "p95": 1528.39140468277,
+            "p99": 1775.4401771584526
+          },
+          "p50_ms": 240.61405193060637,
+          "p95_ms": 1528.39140468277,
+          "p99_ms": 1775.4401771584526,
+          "code_latency_ms": {
+            "count": 200,
+            "mean": 0.370168446097523,
+            "p50": 0.36752899177372456,
+            "p95": 0.41278295684605837,
+            "p99": 0.4575633211061347
+          },
+          "correct_records_per_second": 2.4602611495532045,
+          "model_correct_records_per_second": 1.967716374867878,
+          "under_500ms_fraction": 0.75,
+          "failed_records": 0,
+          "output_tokens": 4322,
+          "decision_calls": 1946,
+          "backbone_forwards": 5122,
+          "common_prefills": 800,
+          "common_token_evaluations": 316993,
+          "context_tokenizations": 800,
+          "cache_copy_bytes": 126228201472,
+          "gpu_seconds": {
+            "cache_copy": 1.4940646714568138,
+            "common": 46.641255859375,
+            "decode": 75.79273431015015,
+            "questions": 122.63261170959473
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "validation-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.99875,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 0.99875,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 0.99,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 507.42794089601375,
+                "p50": 240.61405193060637,
+                "p95": 1528.39140468277,
+                "p99": 1775.4401771584526
+              },
+              "p50_ms": 240.61405193060637,
+              "p95_ms": 1528.39140468277,
+              "p99_ms": 1775.4401771584526,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.370168446097523,
+                "p50": 0.36752899177372456,
+                "p95": 0.41278295684605837,
+                "p99": 0.4575633211061347
+              },
+              "correct_records_per_second": 2.4602611495532045,
+              "model_correct_records_per_second": 1.967716374867878,
+              "under_500ms_fraction": 0.75,
+              "failed_records": 0,
+              "output_tokens": 4322,
+              "decision_calls": 1946,
+              "backbone_forwards": 5122,
+              "common_prefills": 800,
+              "common_token_evaluations": 316993,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 126228201472,
+              "gpu_seconds": {
+                "cache_copy": 1.4940646714568138,
+                "common": 46.641255859375,
+                "decode": 75.79273431015015,
+                "questions": 122.63261170959473
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 240.61405193060637,
+              "p95_ms": 1528.39140468277,
+              "p99_ms": 1775.4401771584526,
+              "wall_seconds": 406.05445490265265,
+              "completed_records_per_second": 2.462723873426631,
+              "output_tokens": 4322,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 96.36189791187644,
+              "warmup_and_compile_seconds": 27.232599263079464
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 240.61405193060637,
+            "min": 240.61405193060637,
+            "max": 240.61405193060637
+          },
+          "p95_ms": {
+            "median": 1528.39140468277,
+            "min": 1528.39140468277,
+            "max": 1528.39140468277
+          },
+          "p99_ms": {
+            "median": 1775.4401771584526,
+            "min": 1775.4401771584526,
+            "max": 1775.4401771584526
+          },
+          "wall_seconds": {
+            "median": 406.05445490265265,
+            "min": 406.05445490265265,
+            "max": 406.05445490265265
+          },
+          "completed_records_per_second": {
+            "median": 2.462723873426631,
+            "min": 2.462723873426631,
+            "max": 2.462723873426631
+          },
+          "output_tokens": {
+            "median": 4322,
+            "min": 4322,
+            "max": 4322
+          },
+          "peak_memory_bytes": {
+            "median": 8822362112,
+            "min": 8822362112,
+            "max": 8822362112
+          },
+          "load_seconds": {
+            "median": 96.36189791187644,
+            "min": 96.36189791187644,
+            "max": 96.36189791187644
+          },
+          "warmup_and_compile_seconds": {
+            "median": 27.232599263079464,
+            "min": 27.232599263079464,
+            "max": 27.232599263079464
+          },
+          "correct_model_records_per_second": {
+            "median": 1.967716374867878,
+            "min": 1.967716374867878,
+            "max": 1.967716374867878
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 600,
+            "structure_accuracy": 0.9983333333333333,
+            "latency_ms": {
+              "count": 600,
+              "mean": 206.3643428000311,
+              "p50": 187.50974745489657,
+              "p95": 357.7577837975695,
+              "p99": 394.54021238256246
+            }
+          },
+          "generation": {
+            "records": 200,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 200,
+              "mean": 1410.6187351839617,
+              "p50": 1380.4610294755548,
+              "p95": 1752.237977669574,
+              "p99": 1884.2168102646235
+            }
+          },
+          "code": {
+            "records": 200,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 200,
+              "mean": 0.370168446097523,
+              "p50": 0.36752899177372456,
+              "p95": 0.41278295684605837,
+              "p99": 0.4575633211061347
+            }
+          }
+        }
+      },
+      "stock-v3-shared": {
+        "quality": {
+          "records": 1000,
+          "model_records": 800,
+          "unique_model_records": 800,
+          "code_records": 200,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 0.7725,
+          "component_accuracy": 0.94375,
+          "copy_accuracy": 0.9875,
+          "state_accuracy": 0.93125,
+          "factual_accuracy": 0.445,
+          "trajectory_accuracy": 0.19,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 800,
+            "mean": 558.7804990442237,
+            "p50": 230.36322742700577,
+            "p95": 2127.900819852948,
+            "p99": 2836.1633188044643
+          },
+          "p50_ms": 230.36322742700577,
+          "p95_ms": 2127.900819852948,
+          "p99_ms": 2836.1633188044643,
+          "code_latency_ms": {
+            "count": 200,
+            "mean": 0.3443991323001683,
+            "p50": 0.3437113482505083,
+            "p95": 0.3942389506846663,
+            "p99": 0.5633840011432766
+          },
+          "correct_records_per_second": 1.8294466234389124,
+          "model_correct_records_per_second": 1.382149160495413,
+          "under_500ms_fraction": 0.74875,
+          "failed_records": 0,
+          "output_tokens": 4928,
+          "decision_calls": 1946,
+          "backbone_forwards": 5728,
+          "common_prefills": 800,
+          "common_token_evaluations": 316993,
+          "context_tokenizations": 800,
+          "cache_copy_bytes": 126228201472,
+          "gpu_seconds": {
+            "cache_copy": 1.4312807029485703,
+            "common": 45.943764762878416,
+            "decode": 90.71989945220948,
+            "questions": 119.36030103683471
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "validation-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.7725,
+              "component_accuracy": 0.94375,
+              "copy_accuracy": 0.9875,
+              "state_accuracy": 0.93125,
+              "factual_accuracy": 0.445,
+              "trajectory_accuracy": 0.19,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 558.7804990442237,
+                "p50": 230.36322742700577,
+                "p95": 2127.900819852948,
+                "p99": 2836.1633188044643
+              },
+              "p50_ms": 230.36322742700577,
+              "p95_ms": 2127.900819852948,
+              "p99_ms": 2836.1633188044643,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3443991323001683,
+                "p50": 0.3437113482505083,
+                "p95": 0.3942389506846663,
+                "p99": 0.5633840011432766
+              },
+              "correct_records_per_second": 1.8294466234389124,
+              "model_correct_records_per_second": 1.382149160495413,
+              "under_500ms_fraction": 0.74875,
+              "failed_records": 0,
+              "output_tokens": 4928,
+              "decision_calls": 1946,
+              "backbone_forwards": 5728,
+              "common_prefills": 800,
+              "common_token_evaluations": 316993,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 126228201472,
+              "gpu_seconds": {
+                "cache_copy": 1.4312807029485703,
+                "common": 45.943764762878416,
+                "decode": 90.71989945220948,
+                "questions": 119.36030103683471
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 230.36322742700577,
+              "p95_ms": 2127.900819852948,
+              "p99_ms": 2836.1633188044643,
+              "wall_seconds": 447.12974378140643,
+              "completed_records_per_second": 2.236487314717497,
+              "output_tokens": 4928,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 77.82997383689508,
+              "warmup_and_compile_seconds": 33.80448930617422
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 230.36322742700577,
+            "min": 230.36322742700577,
+            "max": 230.36322742700577
+          },
+          "p95_ms": {
+            "median": 2127.900819852948,
+            "min": 2127.900819852948,
+            "max": 2127.900819852948
+          },
+          "p99_ms": {
+            "median": 2836.1633188044643,
+            "min": 2836.1633188044643,
+            "max": 2836.1633188044643
+          },
+          "wall_seconds": {
+            "median": 447.12974378140643,
+            "min": 447.12974378140643,
+            "max": 447.12974378140643
+          },
+          "completed_records_per_second": {
+            "median": 2.236487314717497,
+            "min": 2.236487314717497,
+            "max": 2.236487314717497
+          },
+          "output_tokens": {
+            "median": 4928,
+            "min": 4928,
+            "max": 4928
+          },
+          "peak_memory_bytes": {
+            "median": 8822362112,
+            "min": 8822362112,
+            "max": 8822362112
+          },
+          "load_seconds": {
+            "median": 77.82997383689508,
+            "min": 77.82997383689508,
+            "max": 77.82997383689508
+          },
+          "warmup_and_compile_seconds": {
+            "median": 33.80448930617422,
+            "min": 33.80448930617422,
+            "max": 33.80448930617422
+          },
+          "correct_model_records_per_second": {
+            "median": 1.382149160495413,
+            "min": 1.382149160495413,
+            "max": 1.382149160495413
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 600,
+            "structure_accuracy": 0.885,
+            "latency_ms": {
+              "count": 600,
+              "mean": 200.57531327552473,
+              "p50": 177.65672481618822,
+              "p95": 349.88984311930824,
+              "p99": 415.9347327472642
+            }
+          },
+          "generation": {
+            "records": 200,
+            "structure_accuracy": 0.96,
+            "latency_ms": {
+              "count": 200,
+              "mean": 1633.3960563503206,
+              "p50": 1513.1815690547228,
+              "p95": 2765.1175235165283,
+              "p99": 3208.6696348478968
+            }
+          },
+          "code": {
+            "records": 200,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 200,
+              "mean": 0.3443991323001683,
+              "p50": 0.3437113482505083,
+              "p95": 0.3942389506846663,
+              "p99": 0.5633840011432766
+            }
+          }
+        }
+      }
+    },
+    "test-c1": {
+      "lr5e5-v3-shared": {
+        "quality": {
+          "records": 5000,
+          "model_records": 4000,
+          "unique_model_records": 800,
+          "code_records": 1000,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 1.0,
+          "component_accuracy": 1.0,
+          "copy_accuracy": 1.0,
+          "state_accuracy": 1.0,
+          "factual_accuracy": 1.0,
+          "trajectory_accuracy": 1.0,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 4000,
+            "mean": 483.8392325822497,
+            "p50": 225.51701893098652,
+            "p95": 1457.5395841384304,
+            "p99": 1786.3954037986653
+          },
+          "p50_ms": 225.51701893098652,
+          "p95_ms": 1457.5395841384304,
+          "p99_ms": 1786.3954037986653,
+          "code_latency_ms": {
+            "count": 1000,
+            "mean": 0.3457098053768277,
+            "p50": 0.3402796573936939,
+            "p95": 0.41164937429130066,
+            "p99": 0.5989324953407049
+          },
+          "correct_records_per_second": 2.582803935574412,
+          "model_correct_records_per_second": 2.066243148459529,
+          "under_500ms_fraction": 0.74825,
+          "failed_records": 0,
+          "output_tokens": 21740,
+          "decision_calls": 9805,
+          "backbone_forwards": 25740,
+          "common_prefills": 4000,
+          "common_token_evaluations": 1580720,
+          "context_tokenizations": 4000,
+          "cache_copy_bytes": 635925135360,
+          "gpu_seconds": {
+            "cache_copy": 7.276741627335548,
+            "common": 223.66940160751344,
+            "decode": 367.72082296180724,
+            "questions": 587.4333884658813
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "test-c1-r0-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 473.34562793490477,
+                "p50": 220.15343606472015,
+                "p95": 1421.418164600618,
+                "p99": 1835.6555543048303
+              },
+              "p50_ms": 220.15343606472015,
+              "p95_ms": 1421.418164600618,
+              "p99_ms": 1835.6555543048303,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3330996469594538,
+                "p50": 0.3121283371001482,
+                "p95": 0.5442568333819509,
+                "p99": 0.5793279595673082
+              },
+              "correct_records_per_second": 2.6400341289177005,
+              "model_correct_records_per_second": 2.1120273031341603,
+              "under_500ms_fraction": 0.745,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.493227615773678,
+                "common": 44.751105018615725,
+                "decode": 73.41045845031738,
+                "questions": 115.92733085632324
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 220.15343606472015,
+              "p95_ms": 1421.418164600618,
+              "p99_ms": 1835.6555543048303,
+              "wall_seconds": 378.7829820252955,
+              "completed_records_per_second": 2.6400341289177005,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 78.37748023681343,
+              "warmup_and_compile_seconds": 27.553111135028303
+            }
+          },
+          {
+            "trial": "test-c1-r1-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 476.26896656816825,
+                "p50": 223.41898013837636,
+                "p95": 1397.301011579111,
+                "p99": 1650.7194184465332
+              },
+              "p50_ms": 223.41898013837636,
+              "p95_ms": 1397.301011579111,
+              "p99_ms": 1650.7194184465332,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.33831234322860837,
+                "p50": 0.3385525196790695,
+                "p95": 0.37771076895296574,
+                "p99": 0.5948516726493834
+              },
+              "correct_records_per_second": 2.623858126936295,
+              "model_correct_records_per_second": 2.099086501549036,
+              "under_500ms_fraction": 0.74875,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.3988843834996223,
+                "common": 44.18485883331299,
+                "decode": 72.21280813789367,
+                "questions": 116.18573568344117
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 223.41898013837636,
+              "p95_ms": 1397.301011579111,
+              "p99_ms": 1650.7194184465332,
+              "wall_seconds": 381.11816707393155,
+              "completed_records_per_second": 2.623858126936295,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 158.92213853029534,
+              "warmup_and_compile_seconds": 29.742882982827723
+            }
+          },
+          {
+            "trial": "test-c1-r2-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 466.87853565614205,
+                "p50": 218.90466008335352,
+                "p95": 1391.5788818383587,
+                "p99": 1636.4634034130722
+              },
+              "p50_ms": 218.90466008335352,
+              "p95_ms": 1391.5788818383587,
+              "p99_ms": 1636.4634034130722,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3367286082357168,
+                "p50": 0.3395762760192156,
+                "p95": 0.3814654424786567,
+                "p99": 0.4000576678663492
+              },
+              "correct_records_per_second": 2.6766277585758407,
+              "model_correct_records_per_second": 2.1413022068606726,
+              "under_500ms_fraction": 0.75,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.3842402544021606,
+                "common": 42.72723442077637,
+                "decode": 70.58534149360656,
+                "questions": 112.59227619171142
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 218.90466008335352,
+              "p95_ms": 1391.5788818383587,
+              "p99_ms": 1636.4634034130722,
+              "wall_seconds": 373.60443445900455,
+              "completed_records_per_second": 2.6766277585758407,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 145.75995892100036,
+              "warmup_and_compile_seconds": 28.39382303506136
+            }
+          },
+          {
+            "trial": "test-c1-r3-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 514.7343511611689,
+                "p50": 245.27132487855852,
+                "p95": 1516.2540562916543,
+                "p99": 2108.0287522217254
+              },
+              "p50_ms": 245.27132487855852,
+              "p95_ms": 1516.2540562916543,
+              "p99_ms": 2108.0287522217254,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3750984789803624,
+                "p50": 0.3607866819947958,
+                "p95": 0.589311495423317,
+                "p99": 0.637120883911848
+              },
+              "correct_records_per_second": 2.427799927259309,
+              "model_correct_records_per_second": 1.9422399418074474,
+              "under_500ms_fraction": 0.7475,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.5645240938663483,
+                "common": 47.19973519134521,
+                "decode": 77.9108989391327,
+                "questions": 124.87417663574219
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 245.27132487855852,
+              "p95_ms": 1516.2540562916543,
+              "p99_ms": 2108.0287522217254,
+              "wall_seconds": 411.8955556312576,
+              "completed_records_per_second": 2.427799927259309,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 153.74903865670785,
+              "warmup_and_compile_seconds": 27.003454672172666
+            }
+          },
+          {
+            "trial": "test-c1-r4-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 487.96868159086443,
+                "p50": 229.09484361298382,
+                "p95": 1444.61012580432,
+                "p99": 1708.9265925483774
+              },
+              "p50_ms": 229.09484361298382,
+              "p95_ms": 1444.61012580432,
+              "p99_ms": 1708.9265925483774,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.34530994947999716,
+                "p50": 0.3454920370131731,
+                "p95": 0.3823001869022846,
+                "p99": 0.5667837616056203
+              },
+              "correct_records_per_second": 2.560954243615487,
+              "model_correct_records_per_second": 2.0487633948923896,
+              "under_500ms_fraction": 0.75,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.4358652797937392,
+                "common": 44.806468143463135,
+                "decode": 73.60131594085694,
+                "questions": 117.85386909866332
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 229.09484361298382,
+              "p95_ms": 1444.61012580432,
+              "p99_ms": 1708.9265925483774,
+              "wall_seconds": 390.47944823419675,
+              "completed_records_per_second": 2.560954243615487,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 155.83485726686195,
+              "warmup_and_compile_seconds": 28.618001538328826
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 223.41898013837636,
+            "min": 218.90466008335352,
+            "max": 245.27132487855852
+          },
+          "p95_ms": {
+            "median": 1421.418164600618,
+            "min": 1391.5788818383587,
+            "max": 1516.2540562916543
+          },
+          "p99_ms": {
+            "median": 1708.9265925483774,
+            "min": 1636.4634034130722,
+            "max": 2108.0287522217254
+          },
+          "wall_seconds": {
+            "median": 381.11816707393155,
+            "min": 373.60443445900455,
+            "max": 411.8955556312576
+          },
+          "completed_records_per_second": {
+            "median": 2.623858126936295,
+            "min": 2.427799927259309,
+            "max": 2.6766277585758407
+          },
+          "output_tokens": {
+            "median": 4348,
+            "min": 4348,
+            "max": 4348
+          },
+          "peak_memory_bytes": {
+            "median": 8822362112,
+            "min": 8822362112,
+            "max": 8822362112
+          },
+          "load_seconds": {
+            "median": 153.74903865670785,
+            "min": 78.37748023681343,
+            "max": 158.92213853029534
+          },
+          "warmup_and_compile_seconds": {
+            "median": 28.39382303506136,
+            "min": 27.003454672172666,
+            "max": 29.742882982827723
+          },
+          "correct_model_records_per_second": {
+            "median": 2.099086501549036,
+            "min": 1.9422399418074474,
+            "max": 2.1413022068606726
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 3000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 3000,
+              "mean": 197.79796159717566,
+              "p50": 176.72511702403426,
+              "p95": 348.7367049790918,
+              "p99": 454.00392408017035
+            }
+          },
+          "generation": {
+            "records": 1000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 1341.9630455374718,
+              "p50": 1309.7716574557126,
+              "p95": 1713.4043205995113,
+              "p99": 2295.9661792917177
+            }
+          },
+          "code": {
+            "records": 1000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 0.3457098053768277,
+              "p50": 0.3402796573936939,
+              "p95": 0.41164937429130066,
+              "p99": 0.5989324953407049
+            }
+          }
+        }
+      },
+      "stock-v3-shared": {
+        "quality": {
+          "records": 5000,
+          "model_records": 4000,
+          "unique_model_records": 800,
+          "code_records": 1000,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 0.751,
+          "component_accuracy": 0.9325,
+          "copy_accuracy": 0.99125,
+          "state_accuracy": 0.93,
+          "factual_accuracy": 0.354,
+          "trajectory_accuracy": 0.15,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 4000,
+            "mean": 552.1839591600001,
+            "p50": 227.2689996752888,
+            "p95": 2174.07567568589,
+            "p99": 2632.5503690633886
+          },
+          "p50_ms": 227.2689996752888,
+          "p95_ms": 2174.07567568589,
+          "p99_ms": 2632.5503690633886,
+          "code_latency_ms": {
+            "count": 1000,
+            "mean": 0.34782349271699786,
+            "p50": 0.349648529663682,
+            "p95": 0.39857060182839626,
+            "p99": 0.5729144113138318
+          },
+          "correct_records_per_second": 1.8123687703923759,
+          "model_correct_records_per_second": 1.359729217347327,
+          "under_500ms_fraction": 0.749,
+          "failed_records": 0,
+          "output_tokens": 24656,
+          "decision_calls": 9805,
+          "backbone_forwards": 28656,
+          "common_prefills": 4000,
+          "common_token_evaluations": 1580720,
+          "context_tokenizations": 4000,
+          "cache_copy_bytes": 635925135360,
+          "gpu_seconds": {
+            "cache_copy": 7.19956608247757,
+            "common": 221.46822998809813,
+            "decode": 446.977373456955,
+            "questions": 584.3469878425598
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "test-c1-r0-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 558.5476374952123,
+                "p50": 228.99721702560782,
+                "p95": 2214.027878874912,
+                "p99": 2686.714078770019
+              },
+              "p50_ms": 228.99721702560782,
+              "p95_ms": 2214.027878874912,
+              "p99_ms": 2686.714078770019,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3498239954933524,
+                "p50": 0.34997030161321163,
+                "p95": 0.39397713262587786,
+                "p99": 0.5737252486869693
+              },
+              "correct_records_per_second": 1.7921709821797398,
+              "model_correct_records_per_second": 1.344687590873937,
+              "under_500ms_fraction": 0.75,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.45258463960886,
+                "common": 44.38733882904053,
+                "decode": 90.71493277359009,
+                "questions": 117.54056376266479
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 228.99721702560782,
+              "p95_ms": 2214.027878874912,
+              "p99_ms": 2686.714078770019,
+              "wall_seconds": 446.9439623588696,
+              "completed_records_per_second": 2.2374169565290134,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 76.506555238273,
+              "warmup_and_compile_seconds": 27.29310840787366
+            }
+          },
+          {
+            "trial": "test-c1-r1-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 553.4251293691341,
+                "p50": 227.89258672855794,
+                "p95": 2183.1511015538126,
+                "p99": 2811.447990182787
+              },
+              "p50_ms": 227.89258672855794,
+              "p95_ms": 2183.1511015538126,
+              "p99_ms": 2811.447990182787,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.34816285129636526,
+                "p50": 0.3508825320750475,
+                "p95": 0.3902350086718797,
+                "p99": 0.5653038993477819
+              },
+              "correct_records_per_second": 1.8087581750708477,
+              "model_correct_records_per_second": 1.3571331625687635,
+              "under_500ms_fraction": 0.74875,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.441421504497528,
+                "common": 44.314422508239744,
+                "decode": 90.03379597473145,
+                "questions": 117.19090841674804
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 227.89258672855794,
+              "p95_ms": 2183.1511015538126,
+              "p99_ms": 2811.447990182787,
+              "wall_seconds": 442.8452686709352,
+              "completed_records_per_second": 2.258125062510422,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 127.68718153983355,
+              "warmup_and_compile_seconds": 26.555018490180373
+            }
+          },
+          {
+            "trial": "test-c1-r2-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.35,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 551.2328164133942,
+                "p50": 227.14544599875808,
+                "p95": 2172.5072568748146,
+                "p99": 2600.0519876228645
+              },
+              "p50_ms": 227.14544599875808,
+              "p95_ms": 2172.5072568748146,
+              "p99_ms": 2600.0519876228645,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3472581203095615,
+                "p50": 0.35127787850797176,
+                "p95": 0.3876222996041178,
+                "p99": 0.4341420577839014
+              },
+              "correct_records_per_second": 1.813683252627226,
+              "model_correct_records_per_second": 1.3602624394704195,
+              "under_500ms_fraction": 0.75,
+              "failed_records": 0,
+              "output_tokens": 4932,
+              "decision_calls": 1961,
+              "backbone_forwards": 5732,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.4395304973721503,
+                "common": 44.073228786468505,
+                "decode": 89.04588800239563,
+                "questions": 116.10692664718628
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 227.14544599875808,
+              "p95_ms": 2172.5072568748146,
+              "p99_ms": 2600.0519876228645,
+              "wall_seconds": 441.0913531021215,
+              "completed_records_per_second": 2.2671040657840327,
+              "output_tokens": 4932,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 97.59004569007084,
+              "warmup_and_compile_seconds": 30.569014971144497
+            }
+          },
+          {
+            "trial": "test-c1-r3-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 546.6136114182882,
+                "p50": 223.22117863222957,
+                "p95": 2114.557893248275,
+                "p99": 2571.01745583117
+              },
+              "p50_ms": 223.22117863222957,
+              "p95_ms": 2114.557893248275,
+              "p99_ms": 2571.01745583117,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3451379481703043,
+                "p50": 0.32417429611086845,
+                "p95": 0.43965948279946987,
+                "p99": 0.6061757216230035
+              },
+              "correct_records_per_second": 1.8312929732725425,
+              "model_correct_records_per_second": 1.3740412945528067,
+              "under_500ms_fraction": 0.74875,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.4344140169024469,
+                "common": 44.397963733673095,
+                "decode": 88.56624577522278,
+                "questions": 116.92481381988526
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 223.22117863222957,
+              "p95_ms": 2114.557893248275,
+              "p99_ms": 2571.01745583117,
+              "wall_seconds": 437.3958791359328,
+              "completed_records_per_second": 2.28625839359868,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 117.58128595538437,
+              "warmup_and_compile_seconds": 31.802763683255762
+            }
+          },
+          {
+            "trial": "test-c1-r4-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 551.1006011039717,
+                "p50": 225.9561310056597,
+                "p95": 2207.3704820824787,
+                "p99": 2553.0345601029694
+              },
+              "p50_ms": 225.9561310056597,
+              "p95_ms": 2207.3704820824787,
+              "p99_ms": 2553.0345601029694,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.34873454831540585,
+                "p50": 0.35112444311380386,
+                "p95": 0.3952325321733951,
+                "p99": 0.5313599854707715
+              },
+              "correct_records_per_second": 1.8163803164970178,
+              "model_correct_records_per_second": 1.3628521475839046,
+              "under_500ms_fraction": 0.7475,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.4316154240965844,
+                "common": 44.29527613067627,
+                "decode": 88.61651093101501,
+                "questions": 116.58377519607544
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 225.9561310056597,
+              "p95_ms": 2207.3704820824787,
+              "p99_ms": 2553.0345601029694,
+              "wall_seconds": 440.9869412947446,
+              "completed_records_per_second": 2.267640844565565,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 116.63770023314282,
+              "warmup_and_compile_seconds": 26.701009984128177
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 227.14544599875808,
+            "min": 223.22117863222957,
+            "max": 228.99721702560782
+          },
+          "p95_ms": {
+            "median": 2183.1511015538126,
+            "min": 2114.557893248275,
+            "max": 2214.027878874912
+          },
+          "p99_ms": {
+            "median": 2600.0519876228645,
+            "min": 2553.0345601029694,
+            "max": 2811.447990182787
+          },
+          "wall_seconds": {
+            "median": 441.0913531021215,
+            "min": 437.3958791359328,
+            "max": 446.9439623588696
+          },
+          "completed_records_per_second": {
+            "median": 2.2671040657840327,
+            "min": 2.2374169565290134,
+            "max": 2.28625839359868
+          },
+          "output_tokens": {
+            "median": 4931,
+            "min": 4931,
+            "max": 4932
+          },
+          "peak_memory_bytes": {
+            "median": 8822362112,
+            "min": 8822362112,
+            "max": 8822362112
+          },
+          "load_seconds": {
+            "median": 116.63770023314282,
+            "min": 76.506555238273,
+            "max": 127.68718153983355
+          },
+          "warmup_and_compile_seconds": {
+            "median": 27.29310840787366,
+            "min": 26.555018490180373,
+            "max": 31.802763683255762
+          },
+          "correct_model_records_per_second": {
+            "median": 1.3602624394704195,
+            "min": 1.344687590873937,
+            "max": 1.3740412945528067
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 3000,
+            "structure_accuracy": 0.8916666666666667,
+            "latency_ms": {
+              "count": 3000,
+              "mean": 196.3118760936583,
+              "p50": 176.81898456066847,
+              "p95": 348.76150828786183,
+              "p99": 392.3846253473309
+            }
+          },
+          "generation": {
+            "records": 1000,
+            "structure_accuracy": 0.945,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 1619.8002083590254,
+              "p50": 1546.0430779494345,
+              "p95": 2581.9329316960648,
+              "p99": 3141.312488382682
+            }
+          },
+          "code": {
+            "records": 1000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 0.34782349271699786,
+              "p50": 0.349648529663682,
+              "p95": 0.39857060182839626,
+              "p99": 0.5729144113138318
+            }
+          }
+        }
+      }
+    },
+    "test-c8": {
+      "lr5e5-v3-shared": {
+        "quality": {
+          "records": 5000,
+          "model_records": 4000,
+          "unique_model_records": 800,
+          "code_records": 1000,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 1.0,
+          "component_accuracy": 1.0,
+          "copy_accuracy": 1.0,
+          "state_accuracy": 1.0,
+          "factual_accuracy": 1.0,
+          "trajectory_accuracy": 1.0,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 4000,
+            "mean": 5163.363786963862,
+            "p50": 4905.690600164235,
+            "p95": 7453.264068369753,
+            "p99": 9151.603288305923
+          },
+          "p50_ms": 4905.690600164235,
+          "p95_ms": 7453.264068369753,
+          "p99_ms": 9151.603288305923,
+          "code_latency_ms": {
+            "count": 1000,
+            "mean": 0.45307010086253285,
+            "p50": 0.42052334174513817,
+            "p95": 0.6588193820789456,
+            "p99": 0.8276472520083187
+          },
+          "correct_records_per_second": 1.9261982589488174,
+          "model_correct_records_per_second": 1.540958607159054,
+          "under_500ms_fraction": 0.00125,
+          "failed_records": 0,
+          "output_tokens": 21740,
+          "decision_calls": 9805,
+          "backbone_forwards": 25740,
+          "common_prefills": 4000,
+          "common_token_evaluations": 1580720,
+          "context_tokenizations": 4000,
+          "cache_copy_bytes": 635925135360,
+          "gpu_seconds": {
+            "cache_copy": 8.795813311934472,
+            "common": 413.2318466567993,
+            "decode": 426.82041134262084,
+            "questions": 953.0323765640259
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "test-c8-r0-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 4886.344714739826,
+                "p50": 4804.258279502392,
+                "p95": 5831.617285171524,
+                "p99": 7058.047084184361
+              },
+              "p50_ms": 4804.258279502392,
+              "p95_ms": 5831.617285171524,
+              "p99_ms": 7058.047084184361,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.41548124980181456,
+                "p50": 0.3814597148448229,
+                "p95": 0.6186703220009804,
+                "p99": 0.7134837703779333
+              },
+              "correct_records_per_second": 2.035242127045327,
+              "model_correct_records_per_second": 1.6281937016362615,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.6192769598960877,
+                "common": 76.99930918502808,
+                "decode": 80.58366933250427,
+                "questions": 177.01268437957765
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 4804.258279502392,
+              "p95_ms": 5831.617285171524,
+              "p99_ms": 7058.047084184361,
+              "wall_seconds": 491.34203086281195,
+              "completed_records_per_second": 2.035242127045327,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 81.58327305875719,
+              "warmup_and_compile_seconds": 24.16112023126334
+            }
+          },
+          {
+            "trial": "test-c8-r1-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 4436.602465574397,
+                "p50": 4409.786659991369,
+                "p95": 5142.941416753456,
+                "p99": 6014.541094624429
+              },
+              "p50_ms": 4409.786659991369,
+              "p95_ms": 5142.941416753456,
+              "p99_ms": 6014.541094624429,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.4054602445103228,
+                "p50": 0.37467130459845066,
+                "p95": 0.5730534205213189,
+                "p99": 0.6433122977614357
+              },
+              "correct_records_per_second": 2.2406612265723713,
+              "model_correct_records_per_second": 1.792528981257897,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.551430655360222,
+                "common": 72.21137995529175,
+                "decode": 76.26213718032837,
+                "questions": 160.7467456550598
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 4409.786659991369,
+              "p95_ms": 5142.941416753456,
+              "p99_ms": 6014.541094624429,
+              "wall_seconds": 446.2968288739212,
+              "completed_records_per_second": 2.2406612265723713,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 87.30484778573737,
+              "warmup_and_compile_seconds": 24.58301087701693
+            }
+          },
+          {
+            "trial": "test-c8-r2-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 5013.115078738192,
+                "p50": 4862.182731041685,
+                "p95": 6041.267453948967,
+                "p99": 6793.552492577574
+              },
+              "p50_ms": 4862.182731041685,
+              "p95_ms": 6041.267453948967,
+              "p99_ms": 6793.552492577574,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.4391415067948401,
+                "p50": 0.4173014312982559,
+                "p95": 0.5853384500369427,
+                "p99": 0.7697789976373314
+              },
+              "correct_records_per_second": 1.9833006935570348,
+              "model_correct_records_per_second": 1.5866405548456277,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.6479534081816674,
+                "common": 79.04380506515503,
+                "decode": 82.7295889415741,
+                "questions": 182.2945878944397
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 4862.182731041685,
+              "p95_ms": 6041.267453948967,
+              "p99_ms": 6793.552492577574,
+              "wall_seconds": 504.20997847104445,
+              "completed_records_per_second": 1.9833006935570348,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 142.2456126511097,
+              "warmup_and_compile_seconds": 28.24638432590291
+            }
+          },
+          {
+            "trial": "test-c8-r3-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 6130.910478252335,
+                "p50": 5690.533640561625,
+                "p95": 9151.745308702812,
+                "p99": 9776.885609701276
+              },
+              "p50_ms": 5690.533640561625,
+              "p95_ms": 9151.745308702812,
+              "p99_ms": 9776.885609701276,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.512824971228838,
+                "p50": 0.5280743353068829,
+                "p95": 0.6992810405790804,
+                "p99": 0.858203819952905
+              },
+              "correct_records_per_second": 1.6235834895699093,
+              "model_correct_records_per_second": 1.2988667916559273,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 2.108421023309231,
+                "common": 97.28220336914063,
+                "decode": 103.88473902702331,
+                "questions": 228.4494008140564
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 5690.533640561625,
+              "p95_ms": 9151.745308702812,
+              "p99_ms": 9776.885609701276,
+              "wall_seconds": 615.9215133832768,
+              "completed_records_per_second": 1.6235834895699093,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 122.96028978517279,
+              "warmup_and_compile_seconds": 34.02985679823905
+            }
+          },
+          {
+            "trial": "test-c8-r4-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 5349.846197514562,
+                "p50": 5285.744146443903,
+                "p95": 6587.168833985924,
+                "p99": 7362.279710881412
+              },
+              "p50_ms": 5285.744146443903,
+              "p95_ms": 6587.168833985924,
+              "p99_ms": 7362.279710881412,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.49244253197684884,
+                "p50": 0.4521224182099104,
+                "p95": 0.7239301921799773,
+                "p99": 0.8862119261175392
+              },
+              "correct_records_per_second": 1.8586792600897584,
+              "model_correct_records_per_second": 1.4869434080718067,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.8687312651872634,
+                "common": 87.69514908218383,
+                "decode": 83.3602768611908,
+                "questions": 204.52895782089234
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 5285.744146443903,
+              "p95_ms": 6587.168833985924,
+              "p99_ms": 7362.279710881412,
+              "wall_seconds": 538.0164407449774,
+              "completed_records_per_second": 1.8586792600897584,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 147.28442104812711,
+              "warmup_and_compile_seconds": 28.995627702213824
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 4862.182731041685,
+            "min": 4409.786659991369,
+            "max": 5690.533640561625
+          },
+          "p95_ms": {
+            "median": 6041.267453948967,
+            "min": 5142.941416753456,
+            "max": 9151.745308702812
+          },
+          "p99_ms": {
+            "median": 7058.047084184361,
+            "min": 6014.541094624429,
+            "max": 9776.885609701276
+          },
+          "wall_seconds": {
+            "median": 504.20997847104445,
+            "min": 446.2968288739212,
+            "max": 615.9215133832768
+          },
+          "completed_records_per_second": {
+            "median": 1.9833006935570348,
+            "min": 1.6235834895699093,
+            "max": 2.2406612265723713
+          },
+          "output_tokens": {
+            "median": 4348,
+            "min": 4348,
+            "max": 4348
+          },
+          "peak_memory_bytes": {
+            "median": 9057243136,
+            "min": 9057243136,
+            "max": 9057243136
+          },
+          "load_seconds": {
+            "median": 122.96028978517279,
+            "min": 81.58327305875719,
+            "max": 147.28442104812711
+          },
+          "warmup_and_compile_seconds": {
+            "median": 28.24638432590291,
+            "min": 24.16112023126334,
+            "max": 34.02985679823905
+          },
+          "correct_model_records_per_second": {
+            "median": 1.5866405548456277,
+            "min": 1.2988667916559273,
+            "max": 1.792528981257897
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 3000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 3000,
+              "mean": 5156.277545363952,
+              "p50": 4893.876620801166,
+              "p95": 7453.264068369753,
+              "p99": 9155.127698327415
+            }
+          },
+          "generation": {
+            "records": 1000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 5184.622511763591,
+              "p50": 4919.201134936884,
+              "p95": 7412.094531650651,
+              "p99": 9104.780749338679
+            }
+          },
+          "code": {
+            "records": 1000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 0.45307010086253285,
+              "p50": 0.42052334174513817,
+              "p95": 0.6588193820789456,
+              "p99": 0.8276472520083187
+            }
+          }
+        }
+      },
+      "stock-v3-shared": {
+        "quality": {
+          "records": 5000,
+          "model_records": 4000,
+          "unique_model_records": 800,
+          "code_records": 1000,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 0.75075,
+          "component_accuracy": 0.9325,
+          "copy_accuracy": 0.99125,
+          "state_accuracy": 0.93,
+          "factual_accuracy": 0.353,
+          "trajectory_accuracy": 0.15,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 4000,
+            "mean": 5790.378519714926,
+            "p50": 5613.941840361804,
+            "p95": 8391.878916253328,
+            "p99": 10621.941714934046
+          },
+          "p50_ms": 5613.941840361804,
+          "p95_ms": 8391.878916253328,
+          "p99_ms": 10621.941714934046,
+          "code_latency_ms": {
+            "count": 1000,
+            "mean": 0.442696588113904,
+            "p50": 0.39771199226379395,
+            "p95": 0.6586712086573243,
+            "p99": 0.8627524459734559
+          },
+          "correct_records_per_second": 1.3764654363702782,
+          "model_correct_records_per_second": 1.0326069711266415,
+          "under_500ms_fraction": 0.00125,
+          "failed_records": 0,
+          "output_tokens": 24657,
+          "decision_calls": 9805,
+          "backbone_forwards": 28657,
+          "common_prefills": 4000,
+          "common_token_evaluations": 1580720,
+          "context_tokenizations": 4000,
+          "cache_copy_bytes": 635925135360,
+          "gpu_seconds": {
+            "cache_copy": 8.931673442959786,
+            "common": 420.68609883499147,
+            "decode": 514.9118701286316,
+            "questions": 969.4024366722107
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "test-c8-r0-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 5023.930843317648,
+                "p50": 4961.751577677205,
+                "p95": 7186.5324252983555,
+                "p99": 8185.580491353758
+              },
+              "p50_ms": 4961.751577677205,
+              "p95_ms": 7186.5324252983555,
+              "p99_ms": 8185.580491353758,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.37260768935084343,
+                "p50": 0.33834180794656277,
+                "p95": 0.5854835035279392,
+                "p99": 0.6627657311037181
+              },
+              "correct_records_per_second": 1.5871012450766933,
+              "model_correct_records_per_second": 1.190821283759167,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.552750753223896,
+                "common": 73.40213640213013,
+                "decode": 94.62962512207031,
+                "questions": 163.3652173614502
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 4961.751577677205,
+              "p95_ms": 7186.5324252983555,
+              "p99_ms": 8185.580491353758,
+              "wall_seconds": 504.6937002190389,
+              "completed_records_per_second": 1.9813998065876322,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 68.70443929824978,
+              "warmup_and_compile_seconds": 25.145197686273605
+            }
+          },
+          {
+            "trial": "test-c8-r1-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 5367.613174121943,
+                "p50": 5301.610466791317,
+                "p95": 7179.8457777360445,
+                "p99": 8512.432079287246
+              },
+              "p50_ms": 5301.610466791317,
+              "p95_ms": 7179.8457777360445,
+              "p99_ms": 8512.432079287246,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.38913643220439553,
+                "p50": 0.3710223827511072,
+                "p95": 0.5963407922536134,
+                "p99": 0.6805860763415691
+              },
+              "correct_records_per_second": 1.4860008779845895,
+              "model_correct_records_per_second": 1.1149644540183998,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.595527424633503,
+                "common": 77.54933895111084,
+                "decode": 95.92779240989685,
+                "questions": 176.95974479675294
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 5301.610466791317,
+              "p95_ms": 7179.8457777360445,
+              "p99_ms": 8512.432079287246,
+              "wall_seconds": 539.0306371059269,
+              "completed_records_per_second": 1.8551821198309482,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 72.97422080487013,
+              "warmup_and_compile_seconds": 29.184664469212294
+            }
+          },
+          {
+            "trial": "test-c8-r2-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.35,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 6424.806032822235,
+                "p50": 6075.652260100469,
+                "p95": 10211.262815073129,
+                "p99": 12058.483897391707
+              },
+              "p50_ms": 6075.652260100469,
+              "p95_ms": 10211.262815073129,
+              "p99_ms": 12058.483897391707,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.4951523710042238,
+                "p50": 0.45117316767573357,
+                "p95": 0.7962875533848993,
+                "p99": 0.9480968583375211
+              },
+              "correct_records_per_second": 1.2401467744828212,
+              "model_correct_records_per_second": 0.9301100808621159,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4932,
+              "decision_calls": 1961,
+              "backbone_forwards": 5732,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.9879985595345497,
+                "common": 93.40022792053223,
+                "decode": 112.07419145774841,
+                "questions": 219.44447761154174
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 6075.652260100469,
+              "p95_ms": 10211.262815073129,
+              "p99_ms": 12058.483897391707,
+              "wall_seconds": 645.0849338648841,
+              "completed_records_per_second": 1.5501834681035265,
+              "output_tokens": 4932,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 107.61285723000765,
+              "warmup_and_compile_seconds": 24.998206115793437
+            }
+          },
+          {
+            "trial": "test-c8-r3-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.35,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 5742.282783356495,
+                "p50": 5641.818420263007,
+                "p95": 7954.604292870496,
+                "p99": 9261.574696963653
+              },
+              "p50_ms": 5641.818420263007,
+              "p95_ms": 7954.604292870496,
+              "p99_ms": 9261.574696963653,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.45358077390119433,
+                "p50": 0.4092056769877672,
+                "p95": 0.6403513718396425,
+                "p99": 0.8088540751487017
+              },
+              "correct_records_per_second": 1.3876041370488679,
+              "model_correct_records_per_second": 1.040703102786651,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4932,
+              "decision_calls": 1961,
+              "backbone_forwards": 5732,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.8168653141856193,
+                "common": 86.45010552978516,
+                "decode": 98.17250755691528,
+                "questions": 198.04590440368654
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 5641.818420263007,
+              "p95_ms": 7954.604292870496,
+              "p99_ms": 9261.574696963653,
+              "wall_seconds": 576.5333056021482,
+              "completed_records_per_second": 1.7345051713110848,
+              "output_tokens": 4932,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 108.52954451367259,
+              "warmup_and_compile_seconds": 31.374032322317362
+            }
+          },
+          {
+            "trial": "test-c8-r4-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 0.75125,
+              "component_accuracy": 0.9325,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.93,
+              "factual_accuracy": 0.355,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 6393.25976495631,
+                "p50": 6213.303290773183,
+                "p95": 9453.199538635086,
+                "p99": 10614.957960429601
+              },
+              "p50_ms": 6213.303290773183,
+              "p95_ms": 9453.199538635086,
+              "p99_ms": 10614.957960429601,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.5030056741088629,
+                "p50": 0.46578911133110523,
+                "p95": 0.6799495080485937,
+                "p99": 0.879233544692397
+              },
+              "correct_records_per_second": 1.2460512521009097,
+              "model_correct_records_per_second": 0.9349273439608573,
+              "under_500ms_fraction": 0.00125,
+              "failed_records": 0,
+              "output_tokens": 4931,
+              "decision_calls": 1961,
+              "backbone_forwards": 5731,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.9785313913822173,
+                "common": 89.88429003143311,
+                "decode": 114.10775358200074,
+                "questions": 211.5870924987793
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 6213.303290773183,
+              "p95_ms": 9453.199538635086,
+              "p99_ms": 10614.957960429601,
+              "wall_seconds": 642.8307011043653,
+              "completed_records_per_second": 1.5556195407002618,
+              "output_tokens": 4931,
+              "peak_memory_bytes": 9057243136,
+              "load_seconds": 51.949328219052404,
+              "warmup_and_compile_seconds": 26.26189525425434
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 5641.818420263007,
+            "min": 4961.751577677205,
+            "max": 6213.303290773183
+          },
+          "p95_ms": {
+            "median": 7954.604292870496,
+            "min": 7179.8457777360445,
+            "max": 10211.262815073129
+          },
+          "p99_ms": {
+            "median": 9261.574696963653,
+            "min": 8185.580491353758,
+            "max": 12058.483897391707
+          },
+          "wall_seconds": {
+            "median": 576.5333056021482,
+            "min": 504.6937002190389,
+            "max": 645.0849338648841
+          },
+          "completed_records_per_second": {
+            "median": 1.7345051713110848,
+            "min": 1.5501834681035265,
+            "max": 1.9813998065876322
+          },
+          "output_tokens": {
+            "median": 4931,
+            "min": 4931,
+            "max": 4932
+          },
+          "peak_memory_bytes": {
+            "median": 9057243136,
+            "min": 9057243136,
+            "max": 9057243136
+          },
+          "load_seconds": {
+            "median": 72.97422080487013,
+            "min": 51.949328219052404,
+            "max": 108.52954451367259
+          },
+          "warmup_and_compile_seconds": {
+            "median": 26.26189525425434,
+            "min": 24.998206115793437,
+            "max": 31.374032322317362
+          },
+          "correct_model_records_per_second": {
+            "median": 1.040703102786651,
+            "min": 0.9301100808621159,
+            "max": 1.190821283759167
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 3000,
+            "structure_accuracy": 0.8916666666666667,
+            "latency_ms": {
+              "count": 3000,
+              "mean": 5783.758698029909,
+              "p50": 5610.439840704203,
+              "p95": 8502.267145644872,
+              "p99": 10852.73931105619
+            }
+          },
+          "generation": {
+            "records": 1000,
+            "structure_accuracy": 0.945,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 5810.237984769978,
+              "p50": 5618.968961527571,
+              "p95": 8223.0015872512,
+              "p99": 10474.38603896182
+            }
+          },
+          "code": {
+            "records": 1000,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 1000,
+              "mean": 0.442696588113904,
+              "p50": 0.39771199226379395,
+              "p95": 0.6586712086573243,
+              "p99": 0.8627524459734559
+            }
+          }
+        }
+      }
+    },
+    "rollout": {
+      "lr5e5-v3-shared": {
+        "quality": {
+          "records": 1000,
+          "model_records": 800,
+          "unique_model_records": 800,
+          "code_records": 200,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 1.0,
+          "model_accuracy": 1.0,
+          "component_accuracy": 1.0,
+          "copy_accuracy": 1.0,
+          "state_accuracy": 1.0,
+          "factual_accuracy": 1.0,
+          "trajectory_accuracy": 1.0,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 800,
+            "mean": 498.7120985938236,
+            "p50": 232.30684199370444,
+            "p95": 1477.7400277554987,
+            "p99": 1851.0951843997464
+          },
+          "p50_ms": 232.30684199370444,
+          "p95_ms": 1477.7400277554987,
+          "p99_ms": 1851.0951843997464,
+          "code_latency_ms": {
+            "count": 200,
+            "mean": 0.35308826714754105,
+            "p50": 0.3504573833197355,
+            "p95": 0.4283535061404109,
+            "p99": 0.5972841195762156
+          },
+          "correct_records_per_second": 2.5058169734925277,
+          "model_correct_records_per_second": 2.0046535787940223,
+          "under_500ms_fraction": 0.74625,
+          "failed_records": 0,
+          "output_tokens": 4348,
+          "decision_calls": 1961,
+          "backbone_forwards": 5148,
+          "common_prefills": 800,
+          "common_token_evaluations": 316144,
+          "context_tokenizations": 800,
+          "cache_copy_bytes": 127185027072,
+          "gpu_seconds": {
+            "cache_copy": 1.46414527875185,
+            "common": 45.769388637542725,
+            "decode": 75.32880848693847,
+            "questions": 120.02344888687134
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "rollout-lr5e5-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 1.0,
+              "model_accuracy": 1.0,
+              "component_accuracy": 1.0,
+              "copy_accuracy": 1.0,
+              "state_accuracy": 1.0,
+              "factual_accuracy": 1.0,
+              "trajectory_accuracy": 1.0,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 498.7120985938236,
+                "p50": 232.30684199370444,
+                "p95": 1477.7400277554987,
+                "p99": 1851.0951843997464
+              },
+              "p50_ms": 232.30684199370444,
+              "p95_ms": 1477.7400277554987,
+              "p99_ms": 1851.0951843997464,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.35308826714754105,
+                "p50": 0.3504573833197355,
+                "p95": 0.4283535061404109,
+                "p99": 0.5972841195762156
+              },
+              "correct_records_per_second": 2.5058169734925277,
+              "model_correct_records_per_second": 2.0046535787940223,
+              "under_500ms_fraction": 0.74625,
+              "failed_records": 0,
+              "output_tokens": 4348,
+              "decision_calls": 1961,
+              "backbone_forwards": 5148,
+              "common_prefills": 800,
+              "common_token_evaluations": 316144,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127185027072,
+              "gpu_seconds": {
+                "cache_copy": 1.46414527875185,
+                "common": 45.769388637542725,
+                "decode": 75.32880848693847,
+                "questions": 120.02344888687134
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 232.30684199370444,
+              "p95_ms": 1477.7400277554987,
+              "p99_ms": 1851.0951843997464,
+              "wall_seconds": 399.0714447936043,
+              "completed_records_per_second": 2.5058169734925277,
+              "output_tokens": 4348,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 89.9550366140902,
+              "warmup_and_compile_seconds": 27.27029744675383
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 232.30684199370444,
+            "min": 232.30684199370444,
+            "max": 232.30684199370444
+          },
+          "p95_ms": {
+            "median": 1477.7400277554987,
+            "min": 1477.7400277554987,
+            "max": 1477.7400277554987
+          },
+          "p99_ms": {
+            "median": 1851.0951843997464,
+            "min": 1851.0951843997464,
+            "max": 1851.0951843997464
+          },
+          "wall_seconds": {
+            "median": 399.0714447936043,
+            "min": 399.0714447936043,
+            "max": 399.0714447936043
+          },
+          "completed_records_per_second": {
+            "median": 2.5058169734925277,
+            "min": 2.5058169734925277,
+            "max": 2.5058169734925277
+          },
+          "output_tokens": {
+            "median": 4348,
+            "min": 4348,
+            "max": 4348
+          },
+          "peak_memory_bytes": {
+            "median": 8822362112,
+            "min": 8822362112,
+            "max": 8822362112
+          },
+          "load_seconds": {
+            "median": 89.9550366140902,
+            "min": 89.9550366140902,
+            "max": 89.9550366140902
+          },
+          "warmup_and_compile_seconds": {
+            "median": 27.27029744675383,
+            "min": 27.27029744675383,
+            "max": 27.27029744675383
+          },
+          "correct_model_records_per_second": {
+            "median": 2.0046535787940223,
+            "min": 2.0046535787940223,
+            "max": 2.0046535787940223
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 600,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 600,
+              "mean": 202.16594635897005,
+              "p50": 178.51175763644278,
+              "p95": 364.95899285655463,
+              "p99": 404.6327386191115
+            }
+          },
+          "generation": {
+            "records": 200,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 200,
+              "mean": 1388.3505552983843,
+              "p50": 1350.2111765556037,
+              "p95": 1813.701868150383,
+              "p99": 2619.777446491644
+            }
+          },
+          "code": {
+            "records": 200,
+            "structure_accuracy": 1.0,
+            "latency_ms": {
+              "count": 200,
+              "mean": 0.35308826714754105,
+              "p50": 0.3504573833197355,
+              "p95": 0.4283535061404109,
+              "p99": 0.5972841195762156
+            }
+          }
+        }
+      },
+      "stock-v3-shared": {
+        "quality": {
+          "records": 1000,
+          "model_records": 800,
+          "unique_model_records": 800,
+          "code_records": 200,
+          "judgments_complete": true,
+          "pending_factual_reviews": 0,
+          "schema_accuracy": 1.0,
+          "code_accuracy": 0.935,
+          "model_accuracy": 0.74875,
+          "component_accuracy": 0.93125,
+          "copy_accuracy": 0.99125,
+          "state_accuracy": 0.92875,
+          "factual_accuracy": 0.35,
+          "trajectory_accuracy": 0.15,
+          "regression_passed": true,
+          "latency_ms": {
+            "count": 800,
+            "mean": 560.0901549513219,
+            "p50": 231.29589203745127,
+            "p95": 2196.502521517686,
+            "p99": 2609.8669004207472
+          },
+          "p50_ms": 231.29589203745127,
+          "p95_ms": 2196.502521517686,
+          "p99_ms": 2609.8669004207472,
+          "code_latency_ms": {
+            "count": 200,
+            "mean": 0.3506826306693256,
+            "p50": 0.34346035681664944,
+            "p95": 0.41113547049462784,
+            "p99": 0.6091304123401637
+          },
+          "correct_records_per_second": 1.7537876721002275,
+          "model_correct_records_per_second": 1.3365379333181122,
+          "under_500ms_fraction": 0.74625,
+          "failed_records": 0,
+          "output_tokens": 4933,
+          "decision_calls": 1961,
+          "backbone_forwards": 5733,
+          "common_prefills": 800,
+          "common_token_evaluations": 316291,
+          "context_tokenizations": 800,
+          "cache_copy_bytes": 127195119616,
+          "gpu_seconds": {
+            "cache_copy": 1.4547668499350548,
+            "common": 45.42062612915039,
+            "decode": 90.67835120391845,
+            "questions": 119.06004969406128
+          },
+          "stage_profile": {
+            "profiled_records": 0,
+            "host_seconds": {},
+            "cache_reorder_count": 0,
+            "cache_reorder_bytes": 0,
+            "mask_transfer_bytes": 0
+          }
+        },
+        "trials": [
+          {
+            "trial": "rollout-stock-v3-shared",
+            "quality": {
+              "records": 1000,
+              "model_records": 800,
+              "unique_model_records": 800,
+              "code_records": 200,
+              "judgments_complete": true,
+              "pending_factual_reviews": 0,
+              "schema_accuracy": 1.0,
+              "code_accuracy": 0.935,
+              "model_accuracy": 0.74875,
+              "component_accuracy": 0.93125,
+              "copy_accuracy": 0.99125,
+              "state_accuracy": 0.92875,
+              "factual_accuracy": 0.35,
+              "trajectory_accuracy": 0.15,
+              "regression_passed": true,
+              "latency_ms": {
+                "count": 800,
+                "mean": 560.0901549513219,
+                "p50": 231.29589203745127,
+                "p95": 2196.502521517686,
+                "p99": 2609.8669004207472
+              },
+              "p50_ms": 231.29589203745127,
+              "p95_ms": 2196.502521517686,
+              "p99_ms": 2609.8669004207472,
+              "code_latency_ms": {
+                "count": 200,
+                "mean": 0.3506826306693256,
+                "p50": 0.34346035681664944,
+                "p95": 0.41113547049462784,
+                "p99": 0.6091304123401637
+              },
+              "correct_records_per_second": 1.7537876721002275,
+              "model_correct_records_per_second": 1.3365379333181122,
+              "under_500ms_fraction": 0.74625,
+              "failed_records": 0,
+              "output_tokens": 4933,
+              "decision_calls": 1961,
+              "backbone_forwards": 5733,
+              "common_prefills": 800,
+              "common_token_evaluations": 316291,
+              "context_tokenizations": 800,
+              "cache_copy_bytes": 127195119616,
+              "gpu_seconds": {
+                "cache_copy": 1.4547668499350548,
+                "common": 45.42062612915039,
+                "decode": 90.67835120391845,
+                "questions": 119.06004969406128
+              },
+              "stage_profile": {
+                "profiled_records": 0,
+                "host_seconds": {},
+                "cache_reorder_count": 0,
+                "cache_reorder_bytes": 0,
+                "mask_transfer_bytes": 0
+              }
+            },
+            "timing": {
+              "p50_ms": 231.29589203745127,
+              "p95_ms": 2196.502521517686,
+              "p99_ms": 2609.8669004207472,
+              "wall_seconds": 448.1728389952332,
+              "completed_records_per_second": 2.2312820255728085,
+              "output_tokens": 4933,
+              "peak_memory_bytes": 8822362112,
+              "load_seconds": 112.96895470563322,
+              "warmup_and_compile_seconds": 25.77957253390923
+            }
+          }
+        ],
+        "trial_statistics": {
+          "p50_ms": {
+            "median": 231.29589203745127,
+            "min": 231.29589203745127,
+            "max": 231.29589203745127
+          },
+          "p95_ms": {
+            "median": 2196.502521517686,
+            "min": 2196.502521517686,
+            "max": 2196.502521517686
+          },
+          "p99_ms": {
+            "median": 2609.8669004207472,
+            "min": 2609.8669004207472,
+            "max": 2609.8669004207472
+          },
+          "wall_seconds": {
+            "median": 448.1728389952332,
+            "min": 448.1728389952332,
+            "max": 448.1728389952332
+          },
+          "completed_records_per_second": {
+            "median": 2.2312820255728085,
+            "min": 2.2312820255728085,
+            "max": 2.2312820255728085
+          },
+          "output_tokens": {
+            "median": 4933,
+            "min": 4933,
+            "max": 4933
+          },
+          "peak_memory_bytes": {
+            "median": 8822362112,
+            "min": 8822362112,
+            "max": 8822362112
+          },
+          "load_seconds": {
+            "median": 112.96895470563322,
+            "min": 112.96895470563322,
+            "max": 112.96895470563322
+          },
+          "warmup_and_compile_seconds": {
+            "median": 25.77957253390923,
+            "min": 25.77957253390923,
+            "max": 25.77957253390923
+          },
+          "correct_model_records_per_second": {
+            "median": 1.3365379333181122,
+            "min": 1.3365379333181122,
+            "max": 1.3365379333181122
+          }
+        },
+        "type_breakdown": {
+          "semantic": {
+            "records": 600,
+            "structure_accuracy": 0.89,
+            "latency_ms": {
+              "count": 600,
+              "mean": 200.82895148467892,
+              "p50": 178.99666936136782,
+              "p95": 356.7152059171348,
+              "p99": 423.40573208872195
+            }
+          },
+          "generation": {
+            "records": 200,
+            "structure_accuracy": 0.945,
+            "latency_ms": {
+              "count": 200,
+              "mean": 1637.8737653512508,
+              "p50": 1568.724250420928,
+              "p95": 2583.7835179874673,
+              "p99": 2937.068659816868
+            }
+          },
+          "code": {
+            "records": 200,
+            "structure_accuracy": 0.935,
+            "latency_ms": {
+              "count": 200,
+              "mean": 0.3506826306693256,
+              "p50": 0.34346035681664944,
+              "p95": 0.41113547049462784,
+              "p99": 0.6091304123401637
+            }
+          }
+        }
+      }
+    }
+  },
+  "hashes": {
+    "data": "48fdc7054fa7e93795196ecbed7fa79ae2e9b3ca7e2c86efcd0a46afb530a70c",
+    "selection": "24495a5ca31df9a30600411d81af7409d53ac83ccd7a1542e37cf2ac3f167d44",
+    "merged_model": "3ee9a015cec965261b103ceb0fd469eb24fb45aadbb0f0c0aaae9d2c9c1c1b10",
+    "source": "1be7e10281bfcf87149b44e3168c45cd51febecd",
+    "original_revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+  },
+  "terms": {
+    "deepseek-api-terms": {
+      "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+      "resolved_url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+      "retrieved_at": "2026-10-04T01:09:01.987752+00:00",
+      "sha256": "2b433c53cbac75491959025eba5a27908f9f1886352dce0a05f3d5a936d87790",
+      "bytes": 33904
+    },
+    "deepseek-general-terms": {
+      "url": "https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html",
+      "resolved_url": "https://cdn.deepseek.com/policies/ko-KR/deepseek-terms-of-use.html",
+      "retrieved_at": "2026-10-04T01:09:01.987778+00:00",
+      "sha256": "15bf1c77776a3ced4c52a03bd611d3fc778e0d4a292f6d2c174d1dc4bd137ce7",
+      "bytes": 31758
+    },
+    "openrouter-terms": {
+      "url": "https://openrouter.ai/terms",
+      "resolved_url": "https://openrouter.ai/terms",
+      "retrieved_at": "2026-10-04T01:09:01.925528+00:00",
+      "sha256": "a4460691084a6da99b65b945882886093c835542c7dbd7b6c39468083e686665",
+      "bytes": 452197
+    },
+    "provider-page": {
+      "url": "https://openrouter.ai/provider/deepseek",
+      "resolved_url": "https://openrouter.ai/provider/deepseek",
+      "retrieved_at": "2026-10-04T01:09:02.245014+00:00",
+      "sha256": "bfc3416ffba67a897f0b4892827187a8247d588767121c605396a2038b1c77ed",
+      "bytes": 227752
+    },
+    "endpoints": {
+      "url": "https://openrouter.ai/api/v1/models/deepseek/deepseek-v4.1-flash/endpoints",
+      "resolved_url": "https://openrouter.ai/api/v1/models/deepseek/deepseek-v4.1-flash/endpoints",
+      "retrieved_at": "2026-10-04T01:09:01.874443+00:00",
+      "sha256": "72d6873cf3ba1bb7f77c8230b80787962c1fe69927995e1210372c6161a0af04",
+      "bytes": 34167
+    }
+  }
+}

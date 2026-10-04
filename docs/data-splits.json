@@ -1,0 +1,62 @@
+{
+  "version": "shared-genui-v1",
+  "seed": 20261004,
+  "records": 10000,
+  "groups": 1000,
+  "split_groups": {
+    "train": 800,
+    "validation": 100,
+    "test": 100
+  },
+  "family_hash": "3221b9402567fd11636a59e8fa6ba68233d23c196158bd001da851ce99344c84",
+  "kind_per_group": [
+    "semantic",
+    "semantic",
+    "semantic",
+    "code",
+    "semantic",
+    "semantic",
+    "semantic",
+    "code",
+    "generation",
+    "generation"
+  ],
+  "teacher": "deepseek/deepseek-v4.1-flash",
+  "provider_only": [
+    "deepseek"
+  ],
+  "fresh": true,
+  "hashes": {
+    "train": "e21985d1c40912ef1d655174d11f2d0b422bdf0f0f1c16ecb3ebdea54b02ebd4",
+    "validation": "7adbacd45d7d0be94dcade0c36b7c63965cc4c99778786ad087a4155e8b445c3",
+    "test": "7b2521c7aae57020388ed889591126f4575c66857a419ed00f32394686569739"
+  },
+  "prepared_hashes": {
+    "train": "6adeabc6839dc143c088a9df977b963357b1d527c5739392a006e7792a32616e",
+    "validation": "8f359d2b0f8caee2b5d708320cab9ce5968e4e0ee9addde57870781ad884662b"
+  },
+  "sealed_test": true,
+  "data_hash": "48fdc7054fa7e93795196ecbed7fa79ae2e9b3ca7e2c86efcd0a46afb530a70c",
+  "hash_definition": "hashes/prepared_hashes/data_hash use canonical JSON, not file bytes",
+  "provider_route": "official DeepSeek only, through OpenRouter",
+  "reasoning": false,
+  "language_counts": {
+    "train": {
+      "en": 4000,
+      "ko": 4000
+    },
+    "validation": {
+      "en": 500,
+      "ko": 500
+    },
+    "test": {
+      "en": 500,
+      "ko": 500
+    }
+  },
+  "family_counts": {
+    "train": 20,
+    "validation": 4,
+    "test": 4
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "license": "Apache-2.0",
+  "upstream_model": {
+    "id": "Qwen/Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/Qwen/Qwen3.5-4B/blob/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/LICENSE"
+  },
+  "changes": [
+    "LoRA fine-tuning from the original base, one candidate",
+    "LoRA merged into text-model weights",
+    "New synthetic training/validation/test data",
+    "Package renamed from typellm_model to jsonllm; CLI and English release documentation added"
+  ],
+  "hashes": {
+    "data": "48fdc7054fa7e93795196ecbed7fa79ae2e9b3ca7e2c86efcd0a46afb530a70c",
+    "selection": "24495a5ca31df9a30600411d81af7409d53ac83ccd7a1542e37cf2ac3f167d44",
+    "merged_model": "3ee9a015cec965261b103ceb0fd469eb24fb45aadbb0f0c0aaae9d2c9c1c1b10",
+    "source": "1be7e10281bfcf87149b44e3168c45cd51febecd",
+    "original_revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+  },
+  "terms": {
+    "deepseek-api-terms": {
+      "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+      "resolved_url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+      "retrieved_at": "2026-10-04T01:09:01.987752+00:00",
+      "sha256": "2b433c53cbac75491959025eba5a27908f9f1886352dce0a05f3d5a936d87790",
+      "bytes": 33904
+    },
+    "deepseek-general-terms": {
+      "url": "https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html",
+      "resolved_url": "https://cdn.deepseek.com/policies/ko-KR/deepseek-terms-of-use.html",
+      "retrieved_at": "2026-10-04T01:09:01.987778+00:00",
+      "sha256": "15bf1c77776a3ced4c52a03bd611d3fc778e0d4a292f6d2c174d1dc4bd137ce7",
+      "bytes": 31758
+    },
+    "openrouter-terms": {
+      "url": "https://openrouter.ai/terms",
+      "resolved_url": "https://openrouter.ai/terms",
+      "retrieved_at": "2026-10-04T01:09:01.925528+00:00",
+      "sha256": "a4460691084a6da99b65b945882886093c835542c7dbd7b6c39468083e686665",
+      "bytes": 452197
+    },
+    "provider-page": {
+      "url": "https://openrouter.ai/provider/deepseek",
+      "resolved_url": "https://openrouter.ai/provider/deepseek",
+      "retrieved_at": "2026-10-04T01:09:02.245014+00:00",
+      "sha256": "bfc3416ffba67a897f0b4892827187a8247d588767121c605396a2038b1c77ed",
+      "bytes": 227752
+    },
+    "endpoints": {
+      "url": "https://openrouter.ai/api/v1/models/deepseek/deepseek-v4.1-flash/endpoints",
+      "resolved_url": "https://openrouter.ai/api/v1/models/deepseek/deepseek-v4.1-flash/endpoints",
+      "retrieved_at": "2026-10-04T01:09:01.874443+00:00",
+      "sha256": "72d6873cf3ba1bb7f77c8230b80787962c1fe69927995e1210372c6161a0af04",
+      "bytes": 34167
+    }
+  }
+}

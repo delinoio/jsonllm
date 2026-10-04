@@ -1,0 +1,18 @@
+{
+  "context": "I want to change the shipping address for my order. It is not urgent.",
+  "state": {
+    "selection": null,
+    "phase": "idle",
+    "total": 0
+  },
+  "event": {
+    "type": "reset"
+  },
+  "facts": {
+    "request_id": "order-view-12",
+    "order_id": "demo-42",
+    "unit_price": 12.5,
+    "quantity": 2,
+    "shipping_address": "12 Example Street"
+  }
+}
