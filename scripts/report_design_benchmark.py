@@ -6,9 +6,60 @@ import json
 import shutil
 from pathlib import Path
 
-from jsonllm.artifacts import artifact_manifest, verify_artifacts
+from jsonllm.artifacts import artifact_manifest, file_hash, verify_artifacts
 from jsonllm.benchmark_report import aggregate_trials
 from jsonllm.io import dumps, read_jsonl, write_json
+
+
+def provenance(run, output):
+    """Export an explicit evidence allowlist; keep private operation logs local."""
+    evidence = output / "evidence"
+    evidence.mkdir()
+    for name in (
+        "base-gate.json",
+        "jsonllm-gate.json",
+        "kernels.json",
+        "input-audit.json",
+        "costs.json",
+        "recovery-verification.json",
+        "validation.json",
+    ):
+        if (run / name).exists():
+            shutil.copy2(run / name, evidence / name)
+    for name in ("environment-cuda.txt", "environment-vllm.txt"):
+        if (run / name).exists():
+            # Installed package versions suffice; editable paths and direct URLs do not.
+            versions = [
+                line
+                for line in (run / name).read_text().splitlines()
+                if "==" in line and " @ " not in line and not line.startswith("-e")
+            ]
+            (evidence / name).write_text("\n".join(versions) + "\n")
+    invalidated = []
+    for path in sorted((run / "invalidated").glob("*/reason.json")):
+        invalidated.append(
+            {
+                "name": path.parent.name,
+                "reason": json.loads(path.read_text()),
+                "retained_local_files": {
+                    p.name: {"sha256": file_hash(p), "bytes": p.stat().st_size}
+                    for p in sorted(path.parent.iterdir())
+                    if p.is_file()
+                },
+            }
+        )
+    write_json(evidence / "invalidated.json", invalidated)
+    startup = []
+    for path in sorted(run.glob("*-server.json")):
+        record = json.loads(path.read_text())
+        command = list(record["command"])
+        command[0] = "VLLM_PYTHON"
+        position = command.index("--model") + 1
+        command[position] = "models/" + Path(command[position]).name
+        startup.append(
+            {"name": path.stem, "startup_seconds": record["startup_seconds"], "command": command}
+        )
+    write_json(evidence / "server-startup.json", startup)
 
 
 def format_span(value, digits=3):
@@ -157,6 +208,8 @@ def main():
             with gzip.GzipFile(fileobj=stream, mode="wb", mtime=0) as archive:
                 archive.write(("\n".join(dumps(r) for r in rows) + "\n").encode())
         write_json(raw_dir / (path.name + ".summary.json"), {"job": job, "summary": summary})
+        if (path / "warmup.jsonl").exists():
+            shutil.copy2(path / "warmup.jsonl", raw_dir / (path.name + ".warmup.jsonl"))
     result = aggregate_trials(trials)
     result["incomplete_trials"] = incomplete
     for name in (
@@ -169,6 +222,7 @@ def main():
         if (args.run / name).exists():
             shutil.copy2(args.run / name, args.output / name)
     shutil.copytree(args.data, args.output / "data")
+    provenance(args.run, args.output)
     write_json(args.output / "report.json", result)
     (args.output / "README.md").write_text(markdown(result))
     if not args.no_plots:

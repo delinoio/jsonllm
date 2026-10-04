@@ -13,6 +13,16 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
     data, run, output = [tmp_path / name for name in ("data", "run", "report")]
     data.mkdir()
     write_json(data / "manifest.json", {"fixture": True})
+    run.mkdir()
+    (run / "environment-cuda.txt").write_text(
+        "torch==2.14.0\n-e file:///private/local/source\npackage @ https://private.invalid\n"
+    )
+    write_json(run / "base-gate.json", {"status": "passed"})
+    write_json(run / "private-key.json", {"secret": "must-not-export"})
+    invalid = run / "invalidated" / "fixture"
+    invalid.mkdir(parents=True)
+    write_json(invalid / "reason.json", {"reason": "fixture environment failure"})
+    (invalid / "private.log").write_text("private original evidence")
     for method in ("whole_json", "shared_fields"):
         trial = run / "trials" / method
         trial.mkdir(parents=True)
@@ -67,4 +77,10 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
         assert json.loads(stream.readline())["error"]["message"] == "fixture"
     public_summary = (output / "raw/whole_json.summary.json").read_text()
     assert "/private/local/path" not in public_summary and '"pid"' not in public_summary
+    assert (output / "evidence/environment-cuda.txt").read_text() == "torch==2.14.0\n"
+    assert json.loads((output / "evidence/base-gate.json").read_text())["status"] == "passed"
+    invalidated = json.loads((output / "evidence/invalidated.json").read_text())
+    assert invalidated[0]["retained_local_files"]["private.log"]["bytes"] > 0
+    assert not list(output.rglob("private-key.json"))
+    assert not list(output.rglob("private.log"))
     verify_artifacts(output, json.loads((output / "artifacts.json").read_text()))
