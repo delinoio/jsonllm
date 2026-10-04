@@ -1,4 +1,4 @@
-from jsonllm.benchmark_schedule import estimated_seconds, group_key, schedule
+from jsonllm.benchmark_schedule import admit_group, estimated_seconds, group_key, schedule
 
 
 def test_fixed_order_repeats_and_complete_core():
@@ -15,3 +15,12 @@ def test_fixed_order_repeats_and_complete_core():
 def test_time_estimate_is_independent_of_quality():
     job = {"model": "base", "method": "whole_json", "limit": 4, "arrival_rate": 0.5}
     assert estimated_seconds(job, {("base", "whole_json"): 1}, 256) == 132
+
+
+def test_budget_exhaustion_cannot_select_later_cheap_conditions():
+    group = [{"model": "base", "method": "whole_json", "group": "core"}]
+    manifest = {"groups": {"core": {"included": 256}}}
+    timings = {("base", "whole_json"): 1}
+    assert admit_group(group, timings, manifest, 100)[0] is False
+    assert admit_group(group, timings, manifest, 1000)[0] is True
+    assert admit_group(group, timings, manifest, 1000, exhausted=True)[0] is False

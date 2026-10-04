@@ -88,6 +88,14 @@ def group_key(job):
     return (job["stage"], job["group"]) if job["stage"] != "load" else ("load",)
 
 
+def admit_group(group, timings, manifest, remaining, *, exhausted=False):
+    """Stop at the first unaffordable block; never backfill with cheaper later blocks."""
+    estimate = sum(
+        estimated_seconds(j, timings, manifest["groups"][j["group"]]["included"]) for j in group
+    )
+    return not exhausted and estimate < remaining, estimate
+
+
 def estimated_seconds(job, timings, count):
     per_record = timings[(job["model"], job["method"])]
     records = min(count, job.get("limit", count))

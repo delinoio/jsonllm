@@ -15,7 +15,7 @@ import httpx
 
 from jsonllm.artifacts import file_hash, verify_artifacts
 from jsonllm.benchmark_engine import METHODS
-from jsonllm.benchmark_schedule import estimated_seconds, group_key, schedule
+from jsonllm.benchmark_schedule import admit_group, group_key, schedule
 from jsonllm.io import write_json
 
 
@@ -206,13 +206,18 @@ class Worker:
                 )
                 timings[(model, method)] = s["wall_seconds"] / s["records"]
         omitted = []
+        exhausted = False
         for _, grouped in itertools.groupby(jobs, key=group_key):
             group = list(grouped)
-            estimate = sum(
-                estimated_seconds(j, timings, self.manifest["groups"][j["group"]]["included"])
-                for j in group
+            admitted, estimate = admit_group(
+                group,
+                timings,
+                self.manifest,
+                self.args.deadline - time.time(),
+                exhausted=exhausted,
             )
-            if time.time() + estimate >= self.args.deadline:
+            if not admitted:
+                exhausted = True
                 omitted.extend(
                     {**j, "reason": "insufficient_budget_for_complete_comparison"} for j in group
                 )
