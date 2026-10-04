@@ -8,6 +8,7 @@ from pathlib import Path
 
 from jsonllm.artifacts import file_hash, verify_artifacts
 from jsonllm.benchmark_engine import METHODS
+from jsonllm.benchmark_runtime import CUBLAS_WORKSPACE_CONFIG
 from jsonllm.benchmark_schedule import development_timing, estimated_seconds, schedule
 from jsonllm.io import read_jsonl, write_json
 
@@ -18,8 +19,14 @@ def build_seal(run, data, source_commit):
     evidence, timings = {}, {}
     for model in ("base", "jsonllm"):
         gate = run / (model + "-gate.json")
-        if json.loads(gate.read_text())["status"] != "passed":
+        gate_report = json.loads(gate.read_text())
+        if gate_report["status"] != "passed":
             raise ValueError(f"CUDA correctness gate did not pass: {model}")
+        runtime = gate_report.get("numerical_runtime", {})
+        if runtime.get("CUBLAS_WORKSPACE_CONFIG") != CUBLAS_WORKSPACE_CONFIG or not runtime.get(
+            "torch_deterministic_algorithms"
+        ):
+            raise ValueError("CUDA gate used a different numerical environment")
         evidence[gate.name] = file_hash(gate)
         for method in METHODS:
             trial = run / "trials" / f"dev-{model}-{method}"
@@ -28,6 +35,18 @@ def build_seal(run, data, source_commit):
                 raise ValueError("Development model revision mismatch")
             if summary["data_sha256"] != manifest["groups"]["dev"]["sha256"]:
                 raise ValueError("Development data changed")
+            if summary.get("source_commit") != source_commit:
+                raise ValueError("Development source changed; repeat the affected group")
+            expected_runtime = (
+                {
+                    "CUBLAS_WORKSPACE_CONFIG": CUBLAS_WORKSPACE_CONFIG,
+                    "scope": "vLLM engine defaults",
+                }
+                if method == "vllm_json"
+                else runtime
+            )
+            if summary.get("numerical_runtime") != expected_runtime:
+                raise ValueError("Development trial used a different numerical environment")
             rows = read_jsonl(trial / "raw.jsonl")
             if summary["status"] != "complete" or not any(row["schema_valid"] for row in rows):
                 raise ValueError(f"No usable compatibility evidence: {model}/{method}")

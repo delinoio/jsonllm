@@ -23,8 +23,9 @@ def test_seal_binds_development_data_and_evidence(tmp_path):
         (data / (name + ".jsonl")).write_text((data / "dev.jsonl").read_text())
         groups[name] = dict(groups["dev"])
     write_json(data / "manifest.json", {"models": models, "groups": groups})
+    runtime = {"CUBLAS_WORKSPACE_CONFIG": ":4096:8", "torch_deterministic_algorithms": True}
     for model in models:
-        write_json(run / (model + "-gate.json"), {"status": "passed"})
+        write_json(run / (model + "-gate.json"), {"status": "passed", "numerical_runtime": runtime})
         write_json(run / (model + "-model-integrity.json"), {"revision": models[model]["revision"]})
         for method in METHODS:
             trial = run / "trials" / f"dev-{model}-{method}"
@@ -37,6 +38,12 @@ def test_seal_binds_development_data_and_evidence(tmp_path):
                     "status": "complete",
                     "records": 1,
                     "wall_seconds": 1,
+                    "source_commit": "source-fixture",
+                    "numerical_runtime": (
+                        {"CUBLAS_WORKSPACE_CONFIG": ":4096:8", "scope": "vLLM engine defaults"}
+                        if method == "vllm_json"
+                        else runtime
+                    ),
                 },
             )
             write_jsonl(trial / "raw.jsonl", [{"schema_valid": True, "correct": False}])

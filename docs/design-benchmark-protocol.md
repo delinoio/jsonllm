@@ -14,10 +14,23 @@ hardware, greedy decoding, 2048-token limit, and exact-answer oracle:
 3. `batch_fields`: independent fields in a dependency wave, without shared state.
 4. `shared_fields`: the same field prompts and waves, with shared prefix state.
 
+All four eager methods use `CUBLAS_WORKSPACE_CONFIG=:4096:8`, PyTorch deterministic
+algorithms, deterministic cuDNN, and disabled cuDNN benchmarking. These settings
+are applied before CUDA initialization. They do not change FP16 weights or the
+fixed numerical gate tolerance. A development FP16 cached-decode check failed
+under the initial default environment; the complete affected development group
+was invalidated and repeated after this environment change. The failure and
+diagnostics remain audit evidence. Determinism settings do not guarantee identical
+results for every third-party kernel or across library/hardware versions. See
+[PyTorch reproducibility](https://docs.pytorch.org/docs/2.14/notes/randomness.html).
+
 `vllm_json` is a separate practical baseline with JSON Schema constraints and the
 engine's default optimizations. Its loopback HTTP overhead is included. It is
 not used to attribute a speed difference to prefix sharing alone. Each request
 has a fresh cache salt; repeats cannot reuse a previous request's cached prefix.
+The server receives the same cuBLAS workspace setting. Its custom kernels and
+other numerical settings remain vLLM defaults; it is a separate engine baseline,
+not a claim of identical arithmetic with the eager methods.
 
 The original Qwen revision and JSONLLM release revision are fixed in
 `jsonllm.release`. They are reported separately. JSONLLM was trained on scalar

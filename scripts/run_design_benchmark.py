@@ -12,6 +12,7 @@ from jsonllm.artifacts import file_hash
 from jsonllm.benchmark_engine import METHODS, VLLMJSON, WholeJSON, prepare_schemas
 from jsonllm.benchmark_measure import evaluate, measure
 from jsonllm.benchmark_prepare import prepare
+from jsonllm.benchmark_runtime import CUBLAS_WORKSPACE_CONFIG, configure_eager_runtime
 from jsonllm.gpu_telemetry import GpuTelemetry
 from jsonllm.io import read_jsonl, write_json, write_jsonl
 
@@ -52,6 +53,11 @@ def main():
     telemetry = GpuTelemetry(args.output)
     backend = None
     try:
+        runtime = (
+            {"CUBLAS_WORKSPACE_CONFIG": CUBLAS_WORKSPACE_CONFIG, "scope": "vLLM engine defaults"}
+            if args.method == "vllm_json"
+            else configure_eager_runtime()
+        )
         if args.method == "vllm_json":
             backend = VLLMJSON(load_tokenizer(args.model, args.revision), args.url)
         else:
@@ -92,6 +98,7 @@ def main():
             warmup_seconds=warmup_seconds,
             schema_preparation=schema_preparation,
             inference_dtype="float16",
+            numerical_runtime=runtime,
             pid=os.getpid(),
             precision_note="Stored weights BF16; inference weights and buffers FP16",
             source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),

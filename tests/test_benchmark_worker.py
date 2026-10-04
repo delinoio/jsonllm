@@ -16,3 +16,4 @@ def test_server_uses_its_own_build_tools_even_with_symlinked_environment(tmp_pat
     env = module.interpreter_environment(link / "bin" / "python")
     assert env["PATH"].split(os.pathsep)[0] == str(target)
     assert env["PATH"].endswith(os.environ["PATH"])
+    assert env["CUBLAS_WORKSPACE_CONFIG"] == ":4096:8"

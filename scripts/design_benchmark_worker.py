@@ -15,13 +15,18 @@ import httpx
 
 from jsonllm.artifacts import file_hash, verify_artifacts
 from jsonllm.benchmark_engine import METHODS
+from jsonllm.benchmark_runtime import CUBLAS_WORKSPACE_CONFIG
 from jsonllm.benchmark_schedule import admit_group, development_timing, group_key, schedule
 from jsonllm.io import write_json
 
 
 def interpreter_environment(python):
     """Include build tools (such as ninja) from the selected server environment."""
-    return {**os.environ, "PATH": str(python.parent.resolve()) + os.pathsep + os.environ["PATH"]}
+    return {
+        **os.environ,
+        "PATH": str(python.parent.resolve()) + os.pathsep + os.environ["PATH"],
+        "CUBLAS_WORKSPACE_CONFIG": CUBLAS_WORKSPACE_CONFIG,
+    }
 
 
 class Worker:
@@ -172,6 +177,7 @@ class Worker:
                         [
                             sys.executable,
                             "scripts/verify_shared_cuda.py",
+                            "--deterministic-benchmark",
                             "--model",
                             path,
                             "--revision",

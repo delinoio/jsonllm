@@ -405,8 +405,13 @@ def main():
     parser.add_argument("--model", required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--deterministic-benchmark", action="store_true")
     args = parser.parse_args()
     gate = LogitGate(args.output)
+    if args.deterministic_benchmark:
+        from jsonllm.benchmark_runtime import configure_eager_runtime
+
+        gate.report["numerical_runtime"] = configure_eager_runtime()
     gate.report["versions"] = {
         p: importlib.metadata.version(p)
         for p in ["torch", "transformers", "flash-linear-attention", "xgrammar"]
