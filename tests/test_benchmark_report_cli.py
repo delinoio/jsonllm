@@ -13,6 +13,21 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
     data, run, output = [tmp_path / name for name in ("data", "run", "report")]
     data.mkdir()
     write_json(data / "manifest.json", {"fixture": True})
+    write_jsonl(
+        data / "core.jsonl",
+        [
+            {
+                "id": "one",
+                "tokens": {
+                    "context": 100,
+                    "json_prompt": 150,
+                    "json_reserved": 128,
+                    "field_max_reserved": 200,
+                    "answer_value_tokens": [3, 5],
+                },
+            }
+        ],
+    )
     run.mkdir()
     (run / "environment-cuda.txt").write_text(
         "torch==2.14.0\n-e file:///private/local/source\npackage @ https://private.invalid\n"
@@ -81,6 +96,10 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
     report = json.loads((output / "report.json").read_text())
     assert not report["paired_comparisons"][0]["point_quality_gate"]
     assert report["groups"][0]["first_usable_missing"] == 1
+    assert report["groups"][0]["input_tokens"]["context"]["median"] == 100
+    assert report["groups"][0]["reference_value_tokens"]["median"] == 4
+    assert report["groups"][0]["valid_completion_fraction"] == 0
+    assert "Same-model mechanism contrasts" in (output / "README.md").read_text()
     with gzip.open(output / "raw/whole_json.jsonl.gz", "rt") as stream:
         assert json.loads(stream.readline())["error"]["message"] == "fixture"
     public_summary = (output / "raw/whole_json.summary.json").read_text()

@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 from jsonllm.artifacts import artifact_manifest, file_hash, verify_artifacts
-from jsonllm.benchmark_report import aggregate_trials
+from jsonllm.benchmark_report import aggregate_trials, span
 from jsonllm.io import dumps, read_jsonl, write_json
 
 
@@ -86,6 +86,29 @@ def format_span(value, digits=3):
     return f"{value['median']:.{digits}f} [{value['min']:.{digits}f}, {value['max']:.{digits}f}]"
 
 
+def input_contracts(report, data):
+    """Report measured tokenizer sizes once per unique input, not once per repetition."""
+    for group in report["groups"]:
+        path = data / (group["group"] + ".jsonl")
+        rows = read_jsonl(path) if path.exists() else []
+        if group["stage"] == "load":
+            rows = rows[:64]
+        elif group["stage"] == "development":
+            rows = rows[:16]
+        sizes = [r["tokens"] for r in rows if "tokens" in r]
+        group["input_tokens"] = {
+            key: span(s[key] for s in sizes)
+            for key in ("context", "json_prompt", "json_reserved", "field_max_reserved")
+        }
+        group["reference_value_tokens"] = span(
+            length for s in sizes for length in s["answer_value_tokens"]
+        )
+        group["input_size_scope"] = (
+            "Measured inputs, once per record; load uses the first 64, development the first 16. "
+            "Reference value lengths describe task size, not generated output tokens."
+        )
+
+
 def markdown(report):
     lines = [
         "# Design benchmark measurements",
@@ -94,7 +117,7 @@ def markdown(report):
         "Repeated executions are not independent quality samples. p99 is exploratory.",
         "",
         "| Stage / condition | Model | Method | Requests / arrival | Trials | Exact accuracy | "
-        "p50 ms | p95 ms | Completed/s | Correct/s |",
+        "p50 ms | p95 ms | Terminal attempts/s | Correct/s |",
         "|---|---|---|---|---:|---:|---:|---:|---:|---:|",
     ]
     for g in report["groups"]:
@@ -124,6 +147,10 @@ def markdown(report):
         "general GenUI quality. See the protocol for queueing, first usable field, token-budget, "
         "and memory definitions.",
         "",
+        "Terminal attempts/s includes failed requests. Valid outputs/s requires complete "
+        "schema/graph-valid outputs; correct outputs/s also requires the exact oracle answer. "
+        "Latency includes failures. A lower latency alone does not establish a useful speedup.",
+        "",
         "## Type-specific latency",
         "",
         "| Condition | Model | Method | Type | Unique records | Accuracy | "
@@ -140,6 +167,54 @@ def markdown(report):
                 + " | ".join(format_span(k["latency_ms"][p], 1) for p in ("p50", "p95", "p99"))
                 + " |"
             )
+    lines += [
+        "",
+        "## Same-model mechanism contrasts (core)",
+        "",
+        "Speedup is baseline / candidate median record latency. Intervals resample unique "
+        "record IDs. Accuracy delta is candidate minus baseline. The conservative quality "
+        "gate also bounds possible losses without offsetting them by gains.",
+        "",
+        "| Model | Candidate / baseline | Speedup [95% CI] | Accuracy delta [95% CI], pp | "
+        "Point quality gate | Conservative quality gate |",
+        "|---|---|---:|---:|---|---|",
+    ]
+    for c in report["paired_comparisons"]:
+        if c["stage"] != "core":
+            continue
+        lo, hi = c["speedup_cluster_bootstrap_95"]
+        dlo, dhi = c["accuracy_delta_cluster_bootstrap_95"]
+        lines.append(
+            f"| {c['model']} | {c['candidate']} / {c['baseline']} | "
+            f"{c['median_record_latency_speedup']:.3f} [{lo:.3f}, {hi:.3f}] | "
+            f"{100 * c['accuracy_delta']:+.2f} [{100 * dlo:+.2f}, {100 * dhi:+.2f}] | "
+            f"{c['point_quality_gate']} | {c['conservative_quality_gate']} |"
+        )
+    lines += [
+        "",
+        "## Completion and load",
+        "",
+        "| Condition | Model / method | Concurrency / arrival | Valid fraction | "
+        "Valid outputs/s | Errors / timeouts | First usable p50 ms | Dispatch p95 ms | "
+        "Lock p95 ms | Server queue p95 ms |",
+        "|---|---|---|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for g in report["groups"]:
+        if g["stage"] not in {"core", "load"}:
+            continue
+        queues = [
+            g[k].get("p95") for k in ("dispatch_queue_ms", "lock_queue_ms", "server_queue_ms")
+        ]
+        lines.append(
+            f"| {g['stage']} | {g['model']} / {g['method']} | "
+            f"{g['concurrency']} / {g['arrival_rate'] or 'closed'} | "
+            f"{g['valid_completion_fraction']:.2%} | "
+            f"{format_span(g['valid_records_per_second'])} | "
+            f"{g['quality']['errors']} / {g['quality']['timeouts']} | "
+            f"{format_span(g['first_usable_ms']['p50'], 1)} | "
+            + " | ".join("missing" if q is None else f"{q:.1f}" for q in queues)
+            + " |"
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -231,6 +306,7 @@ def main():
         if (path / "warmup.jsonl").exists():
             shutil.copy2(path / "warmup.jsonl", raw_dir / (path.name + ".warmup.jsonl"))
     result = aggregate_trials(trials)
+    input_contracts(result, args.data)
     result["incomplete_trials"] = incomplete
     for name in (
         "omitted.json",
