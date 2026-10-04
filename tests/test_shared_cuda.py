@@ -1,9 +1,35 @@
+from functools import wraps
+
 import pytest
 
 from jsonllm.backends.shared_cuda import SharedPredictor, candidate_logits, fork_cache
 
 torch = pytest.importorskip("torch")
 transformers = pytest.importorskip("transformers")
+
+
+@pytest.fixture(autouse=True)
+def cpu_reference_kernels(monkeypatch):
+    """Keep tiny CPU fixtures on Torch when this host also has the CUDA FLA package."""
+    from transformers.models.qwen3_5 import modeling_qwen3_5 as module
+
+    def route(original):
+        fallback = original.__wrapped__
+
+        @wraps(original)
+        def dispatch(first, *args, **kwargs):
+            implementation = fallback if first.device.type == "cpu" else original
+            return implementation(first, *args, **kwargs)
+
+        return dispatch
+
+    for name in (
+        "torch_chunk_gated_delta_rule",
+        "torch_recurrent_gated_delta_rule",
+        "causal_conv1d_fn",
+        "causal_conv1d_update",
+    ):
+        monkeypatch.setattr(module, name, route(getattr(module, name)))
 
 
 class Tokenizer:
