@@ -94,6 +94,7 @@ def main():
             inference_dtype="float16",
             pid=os.getpid(),
             precision_note="Stored weights BF16; inference weights and buffers FP16",
+            source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         )
         if args.method != "vllm_json":
             summary["peak_allocated_bytes"] = torch.cuda.max_memory_allocated()

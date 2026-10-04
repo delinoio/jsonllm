@@ -140,9 +140,23 @@ Output directories must be new. Preserve failed or invalidated runs. A code or
 environment defect requires a documented invalidation and a fresh complete
 affected comparison, not replacement of only unfavorable records.
 
+The worker first runs `--development-only`, including both actual-weight CUDA
+gates and 16 development records per model/method. After that process exits at
+`awaiting_seal`, commit the final source and prepare the final input directory.
+`scripts/seal_design_benchmark.py --run RUN --data DATA` binds the source commit,
+data manifest, development raw records, gate results, and environment hashes.
+It writes the full planned schedule and development-based time estimates. Start
+the same worker without `--development-only` only after sealing. The worker
+rejects altered development evidence, source, or data and never overwrites trials.
+
 The extra campaign budget is $100, including setup, unsuccessful attempts,
 storage, and recovery. Stop experiments before $90 and reserve $10 for recovery
 and cleanup. Admit complete comparison blocks using development timing only.
+Estimates include 1.5 times development request time and a setup allowance of
+at least 120 seconds, or 1.25 times observed load/warmup/schema/server startup
+plus 15 seconds if larger. Sweep costs can differ from the development mean;
+the fixed external deadline remains the spending bound. Every admission and
+omission is recorded before a block starts.
 Work proceeds in the fixed order core, scaling, load, topology, then the separate
 application serialization comparison. Once a complete block cannot fit, all later
 blocks remain unperformed. Unperformed
