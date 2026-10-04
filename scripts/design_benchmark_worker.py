@@ -19,6 +19,11 @@ from jsonllm.benchmark_schedule import admit_group, development_timing, group_ke
 from jsonllm.io import write_json
 
 
+def interpreter_environment(python):
+    """Include build tools (such as ninja) from the selected server environment."""
+    return {**os.environ, "PATH": str(python.parent.resolve()) + os.pathsep + os.environ["PATH"]}
+
+
 class Worker:
     def __init__(self, args):
         self.args = args
@@ -91,7 +96,11 @@ class Worker:
         self.server_log = (self.root / (name + "-server.log")).open("w")
         started = time.time()
         self.server = subprocess.Popen(
-            command, stdout=self.server_log, stderr=subprocess.STDOUT, start_new_session=True
+            command,
+            stdout=self.server_log,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+            env=interpreter_environment(self.args.vllm_python),
         )
         write_json(self.root / "active-server.json", {"pid": self.server.pid})
         while time.time() < min(started + 900, self.args.deadline):
