@@ -68,6 +68,14 @@ def test_error_releases_session_and_counts_failure():
     assert summary["latency_ms"]["p95"] > 0
 
 
+def test_first_usable_field_includes_dispatch_queue_and_input_processing():
+    row = make_case("dev", 0)
+    scheduled = time.perf_counter() - 0.25
+    result = measure(row, "shared_fields", Fake(row), scheduled=scheduled)
+    assert 0.25 <= result["first_usable_seconds"] <= result["latency_seconds"]
+    assert "first_usable_at" not in result["metrics"]
+
+
 def test_expired_arrival_never_starts_gpu():
     row = make_case("dev", 0)
     fake = Fake(row)

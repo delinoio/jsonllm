@@ -165,13 +165,14 @@ def field_inference(record, predictor, *, serial=False, max_tokens=128, deadline
                 validate_value(record["questions"][name], predicted[name])
             values.update(predicted)
             if first is None:
-                first = time.perf_counter() - started
+                first = time.perf_counter()
             pending = [name for name in pending if name not in predicted]
         validate_object(record, values)
     finally:
         session.close()
     return values, {
-        "first_usable_seconds": first,
+        "first_usable_seconds": first - started if first is not None else None,
+        "first_usable_at": first,
         "session_open_seconds": opened - started,
         "lock_wait_seconds": session.metrics.get("lock_wait_seconds", 0.0),
         "output_tokens": sum(c["output_tokens"] for c in session.metrics.get("calls", [])),

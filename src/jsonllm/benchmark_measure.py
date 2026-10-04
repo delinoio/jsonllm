@@ -51,7 +51,7 @@ def measure(case, method, backend, *, scheduled=None, timeout=120):
     valid = output is not None and error is None
     correct = valid and output == case["answers"] and graph_valid is not False
     latency = ended - scheduled
-    first = metrics.get("first_usable_seconds")
+    first_at = metrics.pop("first_usable_at", None)
     return {
         "id": case["id"],
         "kind": case["kind"],
@@ -61,8 +61,8 @@ def measure(case, method, backend, *, scheduled=None, timeout=120):
         "latency_seconds": latency,
         "service_seconds": ended - entered,
         "dispatch_queue_seconds": entered - scheduled,
-        "first_usable_seconds": (first + entered - scheduled)
-        if first is not None
+        "first_usable_seconds": (first_at - scheduled)
+        if first_at is not None
         else (latency if valid else None),
         "schema_valid": valid,
         "correct": correct,
