@@ -44,7 +44,7 @@ def reference(case):
     return result
 
 
-def make_case(split, index, *, kind=None, width=8, depth=1, choices=4, text_words=8):
+def make_case(split, index, *, kind=None, width=8, depth=4, choices=4, text_words=8):
     kind = kind or KINDS[(index // 2) % len(KINDS)]
     seed = int.from_bytes(hashlib.sha256(f"{SEED}:{split}:{index}".encode()).digest()[:8])
     rng = random.Random(seed)

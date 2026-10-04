@@ -135,7 +135,9 @@ class SharedSession:
             predictor.profile_stages, predictor.device, self.metrics, self.gpu_events
         )
         with self.profile("lock_wait"):
+            lock_started = time.perf_counter()
             predictor.lock.acquire()
+            self.metrics["lock_wait_seconds"] = time.perf_counter() - lock_started
         self.lock_owned = True
 
     def _forward(self, tokens, cache, *, kind, lengths=None):
