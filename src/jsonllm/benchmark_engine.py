@@ -145,6 +145,7 @@ def field_inference(record, predictor, *, serial=False, max_tokens=128, deadline
     started = time.perf_counter()
     session = predictor.open_record(record["context"], len(pending))
     opened = time.perf_counter()
+    failure = None
     try:
         while pending:
             if deadline is not None and time.perf_counter() >= deadline:
@@ -168,16 +169,23 @@ def field_inference(record, predictor, *, serial=False, max_tokens=128, deadline
                 first = time.perf_counter()
             pending = [name for name in pending if name not in predicted]
         validate_object(record, values)
+    except Exception as exc:
+        failure = exc
+        raise
     finally:
         session.close()
-    return values, {
-        "first_usable_seconds": first - started if first is not None else None,
-        "first_usable_at": first,
-        "session_open_seconds": opened - started,
-        "lock_wait_seconds": session.metrics.get("lock_wait_seconds", 0.0),
-        "output_tokens": sum(c["output_tokens"] for c in session.metrics.get("calls", [])),
-        "model": session.metrics,
-    }
+        metrics = {
+            "first_usable_seconds": first - started if first is not None else None,
+            "first_usable_at": first,
+            "session_open_seconds": opened - started,
+            "lock_wait_seconds": session.metrics.get("lock_wait_seconds", 0.0),
+            "output_tokens": sum(c["output_tokens"] for c in session.metrics.get("calls", [])),
+            "model": session.metrics,
+        }
+        if failure is not None:
+            # Keep earlier validated waves when a later field fails or times out.
+            failure.benchmark_metrics = metrics
+    return values, metrics
 
 
 class WholeJSON:

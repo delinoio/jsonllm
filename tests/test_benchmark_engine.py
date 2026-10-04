@@ -1,5 +1,6 @@
 import time
 
+import httpx
 import pytest
 from jsonschema.exceptions import ValidationError
 
@@ -83,6 +84,37 @@ def test_expired_arrival_never_starts_gpu():
     assert not fake.waves
     assert result["error"]["type"] == "TimeoutError"
     assert result["latency_seconds"] >= 2
+
+
+def test_partial_first_field_survives_later_wave_timeout():
+    row = make_case("dev", 1, kind="dependency", width=2, depth=2)
+    fake = Fake(row)
+
+    class LaterFailure(Session):
+        def predict(self, record, names, answers, max_tokens):
+            if answers:
+                raise TimeoutError("request_timeout")
+            return super().predict(record, names, answers, max_tokens)
+
+    fake.open_record = lambda context, count: LaterFailure(fake)
+    result = measure(row, "shared_fields", fake)
+    assert result["error"]["timeout"]
+    assert not result["correct"] and not result["schema_valid"]
+    assert 0 <= result["first_usable_seconds"] <= result["latency_seconds"]
+    assert fake.closed
+
+
+def test_empty_http_timeout_message_is_counted():
+    row = make_case("dev", 0)
+    row["json_max_tokens"] = 128
+
+    class HTTPTimeout:
+        def infer(self, record, max_tokens, deadline):
+            raise httpx.ReadTimeout("")
+
+    result = measure(row, "vllm_json", HTTPTimeout())
+    assert result["error"]["message"] == ""
+    assert summarize([result], 1)["timeouts"] == 1
 
 
 def test_schema_rejects_extra_missing_and_wrong_value():

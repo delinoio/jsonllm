@@ -5,6 +5,8 @@ import statistics
 import time
 from concurrent.futures import ThreadPoolExecutor
 
+import httpx
+
 from .benchmark_data import assemble_topology, inference_record
 from .benchmark_engine import decision_values, field_inference, render_output, validate_object
 from .io import dumps
@@ -46,7 +48,12 @@ def measure(case, method, backend, *, scheduled=None, timeout=120):
         if time.perf_counter() - scheduled > timeout:
             raise TimeoutError("request_timeout")
     except Exception as exc:
-        error = {"type": type(exc).__name__, "message": str(exc)[:500]}
+        metrics = getattr(exc, "benchmark_metrics", metrics)
+        error = {
+            "type": type(exc).__name__,
+            "message": str(exc)[:500],
+            "timeout": isinstance(exc, (TimeoutError, httpx.TimeoutException)),
+        }
     ended = time.perf_counter()
     valid = output is not None and error is None
     correct = valid and output == case["answers"] and graph_valid is not False
@@ -116,7 +123,11 @@ def summarize(rows, wall):
         "errors": sum(r["error"] is not None for r in rows),
         "timeouts": sum(
             r["error"] is not None
-            and ("timeout" in r["error"]["message"] or "queue" in r["error"]["message"])
+            and (
+                r["error"].get("timeout", False)
+                or "timeout" in r["error"]["message"]
+                or "queue" in r["error"]["message"]
+            )
             for r in rows
         ),
         "latency_ms": distribution([r["latency_seconds"] * 1000 for r in rows]),
