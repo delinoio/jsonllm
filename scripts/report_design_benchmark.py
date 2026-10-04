@@ -272,6 +272,81 @@ def plots(report, output):
     fig.savefig(output / "core-comparison.png", dpi=180)
     fig.savefig(output / "core-comparison.svg")
     plt.close(fig)
+    scaling_plots(report, output)
+
+
+def scaling_plots(report, output):
+    """Keep weights in separate rows and show trial ranges for each isolated axis."""
+    import matplotlib.pyplot as plt
+
+    colors = {
+        "whole_json": "#475569",
+        "serial_fields": "#d97706",
+        "batch_fields": "#2563eb",
+        "shared_fields": "#0d9488",
+    }
+    for axis, label in (
+        ("width", "Independent fields"),
+        ("context_tokens", "Actual common-context tokens (median)"),
+        ("depth", "Dependency waves"),
+        ("choices", "Choices per field"),
+        ("text_words", "Reference value tokens (median)"),
+    ):
+        prefix = "scale-" + axis + "-"
+        selected = [
+            g for g in report["groups"] if g["stage"] == "scale" and g["group"].startswith(prefix)
+        ]
+        if not selected:
+            continue
+        fig, axes = plt.subplots(2, 2, figsize=(12, 8), layout="constrained")
+        for row, model in enumerate(("base", "jsonllm")):
+            for method, color in colors.items():
+                points = sorted(
+                    [g for g in selected if g["model"] == model and g["method"] == method],
+                    key=lambda g: int(g["group"].rsplit("-", 1)[1]),
+                )
+                if not points:
+                    continue
+                if axis == "text_words":
+                    xs = [g["reference_value_tokens"]["median"] for g in points]
+                elif axis == "context_tokens":
+                    xs = [g["input_tokens"]["context"]["median"] for g in points]
+                else:
+                    xs = [int(g["group"].rsplit("-", 1)[1]) for g in points]
+                for col in (0, 1):
+                    values = [
+                        g["latency_ms"]["p95"]
+                        if col == 0
+                        else g["trial_metrics"]["correct_records_per_second"]
+                        for g in points
+                    ]
+                    axes[row, col].errorbar(
+                        xs,
+                        [v["median"] for v in values],
+                        yerr=[
+                            [v["median"] - v["min"] for v in values],
+                            [v["max"] - v["median"] for v in values],
+                        ],
+                        marker="o",
+                        capsize=3,
+                        label=method,
+                        color=color,
+                    )
+                    axes[row, col].set_xticks(xs)
+            for col, metric in enumerate(("p95 latency (ms)", "Correct complete outputs/s")):
+                ax = axes[row, col]
+                ax.set_title(f"{model} · {metric}")
+                ax.set_xlabel(label)
+                ax.grid(alpha=0.2)
+                ax.spines[["top", "right"]].set_visible(False)
+        axes[0, 0].legend(fontsize=8)
+        fig.suptitle(
+            "Isolated scaling axis · trial median and range\n"
+            "32 distinct synthetic records per condition; quality gates are reported separately"
+        )
+        fig.savefig(output / ("scale-" + axis + ".png"), dpi=180)
+        fig.savefig(output / ("scale-" + axis + ".svg"))
+        plt.close(fig)
 
 
 def main():
