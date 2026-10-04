@@ -15,6 +15,8 @@ hf download kdy1/JSONLLM-Qwen3.5-4B-v0.1 \
 uv run --no-sync python scripts/verify_release.py models/JSONLLM-Qwen3.5-4B-v0.1
 ```
 
+Frozen model release: [`2a020c2cddaec6fcb86ef0d6665f1ee11f699738`](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/tree/2a020c2cddaec6fcb86ef0d6665f1ee11f699738). This is distinct from the upstream base revision.
+
 The manifest contains byte-level SHA-256 digests and sizes. The dataset also has canonical JSON digests from collection. These are different hash definitions and must not be substituted for one another.
 
 ## Historical training recipe

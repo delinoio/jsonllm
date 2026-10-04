@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from jsonllm.cli import main, parser
@@ -8,6 +9,7 @@ from jsonllm.release import MODEL_ID, MODEL_REVISION
 def test_release_revision_is_separate_from_base_revision():
     args = parser().parse_args(["run", "--spec", "s", "--input", "i"])
     assert (args.model, args.revision) == (MODEL_ID, MODEL_REVISION)
+    assert re.fullmatch(r"[0-9a-f]{40}", args.revision)
     assert args.revision != "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
 
 

@@ -12,7 +12,7 @@ This is a small, budget-conscious experiment based on Qwen3.5-4B. It is an invit
 
 - Typed choice, boolean, and constrained scalar decisions.
 - Dependency waves: independent fields run together; dependent fields wait for their inputs.
-- `shared-context-v3`: common context is prefetched once and its hybrid model cache is copied for field branches.
+- `shared-context-v3`: common context is processed once and its hybrid model cache is copied for field branches.
 - Deterministic state transitions, arithmetic, exact copies, component selection, and output assembly.
 - An experimental CUDA runtime, LoRA training, merge checks, and evaluation tools.
 - `compile_ui`, `run_ui`, and `SharedPredictor`, with the original POC input contracts preserved.
@@ -73,7 +73,7 @@ uv run --no-sync pytest -m 'not mlx and not cuda and not tokenizer'
 uv build
 ```
 
-Optional-backend tests skip when their dependencies or hardware are unavailable. No paid service is needed for the CPU tests. New GPU comparisons are deferred to a separate benchmark phase.
+Optional-backend tests skip when their dependencies or hardware are unavailable. No paid service is needed for the CPU tests. New GPU comparisons are deferred to a separate benchmark phase. [Release verification](docs/release-verification.json) records the CPU checks and private upload integrity.
 
 ## License and provenance
 

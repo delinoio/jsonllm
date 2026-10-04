@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-04",
+  "local_cpu": {
+    "command": "JSONLLM_TEST_TOKENIZER=.release/model HF_HUB_OFFLINE=1 uv run --no-sync pytest -q -m 'not mlx and not cuda'",
+    "passed": 165,
+    "deselected_cuda": 9,
+    "tokenizer": "unchanged tokenizer from the release bundle, local files only",
+    "paid_api_calls": 0,
+    "new_gpu_runs": 0
+  },
+  "ruff": "lint and format checks passed",
+  "packaging": "sdist and wheel built; wheel installed in a fresh core-only environment; all library modules imported outside the source checkout; CLI help and code-only example passed",
+  "preserved_core": {
+    "method": "AST equality against original implementation",
+    "modules": [
+      "ui.py",
+      "prompts.py",
+      "backends/shared_cuda.py"
+    ],
+    "source_commit": "1be7e10281bfcf87149b44e3168c45cd51febecd"
+  },
+  "initial_ci": {
+    "url": "https://github.com/delinoio/jsonllm/actions/runs/37198129249",
+    "commit": "2859f2c7f6e02ffd917b32e12ab259c08106c95a",
+    "conclusion": "success",
+    "core_tests_passed": 90,
+    "skipped_optional_backend": 8,
+    "deselected_tokenizer": 1
+  },
+  "limitations": [
+    "No new GPU inference, training, throughput benchmark, or paid teacher request during packaging.",
+    "Historical H100 results apply to the frozen original experiment, not a rerun of the renamed package.",
+    "CUDA runtime, model/data bytes and prompt semantics were preserved; CLI, import paths, packaging and documentation changed."
+  ],
+  "hugging_face": {
+    "repo": "kdy1/JSONLLM-Qwen3.5-4B-v0.1",
+    "private": true,
+    "commit": "2a020c2cddaec6fcb86ef0d6665f1ee11f699738",
+    "files_verified": 29,
+    "payload_bytes": 8666367656,
+    "all_passed": true,
+    "verification_method": "Remote LFS SHA-256 and file size; small Git blobs downloaded at the pinned commit and checked by SHA-256 and size."
+  },
+  "source_integrity": {
+    "immutable_files": 13,
+    "all_match": true,
+    "manifest_sha256": "e9a554445ceb15488e2dddd3eba386c49a6ac4abe3c4563af1e21d77c1d71a48"
+  },
+  "post_pin_checks": "Ruff lint/format, 7 CLI/import/integrity tests, sdist/wheel rebuild, fresh installed wheel import and immutable revision checks passed."
+}
