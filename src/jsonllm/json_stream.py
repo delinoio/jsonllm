@@ -5,7 +5,7 @@ import time
 
 import httpx
 
-from .benchmark import strict_json
+from .metrics import strict_json
 
 
 def sse_events(lines):

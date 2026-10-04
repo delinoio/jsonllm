@@ -13,3 +13,11 @@ jobs:
       - run: uv run --no-sync ruff format --check .
       - run: uv run --no-sync pytest -m 'not mlx and not cuda and not tokenizer'
       - run: uv run --no-sync jsonllm --help
+      - run: uv build
+      - name: Check installed wheel outside the source tree
+        run: |
+          uv venv /tmp/jsonllm-wheel
+          uv pip install --python /tmp/jsonllm-wheel/bin/python dist/*.whl
+          cd /tmp
+          /tmp/jsonllm-wheel/bin/python -c 'import jsonllm; from jsonllm import compile_ui, run_ui'
+          /tmp/jsonllm-wheel/bin/jsonllm --help
