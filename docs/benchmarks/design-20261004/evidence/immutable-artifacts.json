@@ -1,0 +1,61 @@
+{
+  "repo": "kdy1/JSONLLM-Qwen3.5-4B-v0.1",
+  "private": true,
+  "inference_revision": "2a020c2cddaec6fcb86ef0d6665f1ee11f699738",
+  "immutable_files": {
+    "model.safetensors": {
+      "sha256": "3ee9a015cec965261b103ceb0fd469eb24fb45aadbb0f0c0aaae9d2c9c1c1b10",
+      "bytes": 8411558400
+    },
+    "chat_template.jinja": {
+      "sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+      "bytes": 7756
+    },
+    "config.json": {
+      "sha256": "63f47812d0f11118e4d252d2b3ad488707eb9287a11589f4fd382a1d31182724",
+      "bytes": 1979
+    },
+    "generation_config.json": {
+      "sha256": "62153eb6c69f2e1f426beaa8002b7186437e949c7588167085df14e10e9c0a73",
+      "bytes": 116
+    },
+    "tokenizer.json": {
+      "sha256": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+      "bytes": 19989325
+    },
+    "tokenizer_config.json": {
+      "sha256": "9cf04fffe3d8c3b85e439fb35c7acad0761ab51c422a8c4256d9f887c3a0be7d",
+      "bytes": 1125
+    },
+    "adapter/adapter_model.safetensors": {
+      "sha256": "9896496bfbd28cfba3f8386b7eec86943f41047768ce4bf02a76c4c0428308fe",
+      "bytes": 129927008
+    },
+    "adapter/adapter_config.json": {
+      "sha256": "534249ec16c1b9120b4afc711bcb8774be279915e7a2473559c803be637891b0",
+      "bytes": 1294
+    },
+    "data/train.jsonl": {
+      "sha256": "23450c885ca4d50d44d6c887ee137794db0ce3fdc772031373260c0a7990998f",
+      "bytes": 47427192
+    },
+    "data/validation.jsonl": {
+      "sha256": "9b8171c267137b9bd62e6882c381d12ef8c0ec268e26c8b1c30000d5a6d78fec",
+      "bytes": 5989712
+    },
+    "data/test.jsonl": {
+      "sha256": "7e87f258b761f660911724966bc937a6208119c9f31ca91a307dc14b3cfd1cd4",
+      "bytes": 5985272
+    },
+    "data/prepared/train.jsonl": {
+      "sha256": "f73a96dc1a92b5b5e149208f9264d431e358acfe433eec103df1744a137f38fd",
+      "bytes": 40244961
+    },
+    "data/prepared/validation.jsonl": {
+      "sha256": "990d26d29f7d5b6872ffc2a9f830f794ebc0cd55a5e6f21b4b8981efebc08a59",
+      "bytes": 5067190
+    }
+  },
+  "all_match": true,
+  "checked_at": "2026-10-05"
+}

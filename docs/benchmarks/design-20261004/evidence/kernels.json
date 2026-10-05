@@ -1,0 +1,1 @@
+{"torch_chunk_gated_delta_rule":"fla.ops.gated_delta_rule.chunk.chunk_gated_delta_rule","torch_recurrent_gated_delta_rule":"fla.ops.gated_delta_rule.fused_recurrent.fused_recurrent_gated_delta_rule","causal_conv1d_fn":"transformers.models.qwen3_5.modeling_qwen3_5.causal_conv1d_fn","causal_conv1d_update":"transformers.models.qwen3_5.modeling_qwen3_5.causal_conv1d_update"}

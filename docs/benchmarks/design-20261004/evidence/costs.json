@@ -1,0 +1,9 @@
+{
+  "runpod_conservative_estimated_usd": 64.43841260631083,
+  "api_usd": 0,
+  "total_budget_usd": 100,
+  "includes_setup_failure_storage_recovery": true,
+  "is_provider_invoice": false,
+  "historical_campaign_estimate_usd": 29.070653516,
+  "cumulative_estimate_usd": 93.50906612231083
+}

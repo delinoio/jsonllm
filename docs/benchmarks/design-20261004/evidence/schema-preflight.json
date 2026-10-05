@@ -1,0 +1,1 @@
+{"status":"passed","distinct_object_schemas":507,"records":1088,"seconds":88.09830975532532,"manifest_sha256":"c0ed45608188f10bf1437e9e00d11cd5484aaa1b3e3a835aba6a14a8182adb57","note":"CPU grammar compilation only; no test prompt inference or paid API."}

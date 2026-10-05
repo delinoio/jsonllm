@@ -1,0 +1,17 @@
+{
+  "verified_at": 1791180278.986707,
+  "files_verified": 4054,
+  "hash_mismatches": [],
+  "source_manifest_sha256": "c0f23a9721274103311f4d4e5589b44798e691a830802e57e44b82597e94e926",
+  "pod_deleted": true,
+  "volume_deleted": true,
+  "provider_absence_verified": true,
+  "controller_exited": true,
+  "caffeinate_released": true,
+  "worker": {
+    "status": "complete",
+    "updated_at": 1791179844.2955554,
+    "stage": "measurements_complete",
+    "omitted": 0
+  }
+}

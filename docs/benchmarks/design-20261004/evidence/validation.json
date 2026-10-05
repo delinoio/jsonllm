@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-05",
+  "reporting_source_commit": "f56b0ba9857ff3d486ef759361b6efe3608b9b18",
+  "measurement_source_commit": "b241f1bd9f05649429ad798feaab5566d74bd190",
+  "cpu": {
+    "passed": 196,
+    "deselected_cuda": 9,
+    "seconds": 68.51,
+    "offline_tokenizer": true
+  },
+  "ruff": "lint and format passed (98 source files)",
+  "build": "sdist and wheel passed",
+  "fresh_wheel": {
+    "core_environment": true,
+    "imported_modules": 39,
+    "cli_help": true,
+    "code_only_example": true,
+    "inference_revision_unchanged": true
+  },
+  "actual_weight_cuda_gates": {
+    "base_comparisons": 105,
+    "jsonllm_comparisons": 105,
+    "passed": true,
+    "fixed_tolerances": true,
+    "rerun_during_reporting": false
+  },
+  "archive_audit": {
+    "formal_schedule_entries": 540,
+    "matching_jobs_sources_and_input_hashes": 540,
+    "original_raw_semantic_roundtrips": 540,
+    "incomplete": 0,
+    "budget_omitted": 0,
+    "private_path_secret_scan_findings": 0
+  },
+  "figures": {
+    "visually_inspected_pngs": [
+      "core-comparison",
+      "scale-width",
+      "scale-context_tokens",
+      "scale-depth",
+      "scale-choices",
+      "scale-text_words"
+    ],
+    "labels_legends_ranges_readable": true
+  },
+  "recovery_receipt": "recovery-verification.json",
+  "immutable_receipt": "immutable-artifacts.json",
+  "limitations": [
+    "CUDA tests were not rerun on the local Mac. Actual-weight gates and formal trials ran on the now-deleted H100.",
+    "Scan is an explicit path/credential-pattern and allowlist check, not a guarantee against every possible sensitive value."
+  ]
+}
