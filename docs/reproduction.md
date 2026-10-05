@@ -1,6 +1,6 @@
 # Reproduction
 
-The release preserves one completed experiment. No training, GPU evaluation, or paid API call is performed when the package is installed or its CPU tests run.
+The release preserves the historical training evaluation and a separate completed execution design study. No training, GPU evaluation, or paid API call is performed when the package is installed or its CPU tests run.
 
 ## Get and verify the frozen artifacts
 
@@ -63,4 +63,4 @@ uv build
 
 The core environment skips tests that need optional backend packages. Installing the CUDA extra makes more CPU tests available, but does not provide a CUDA device on a Mac. To use an already downloaded release tokenizer, set `JSONLLM_TEST_TOKENIZER=models/JSONLLM-Qwen3.5-4B-v0.1`. No model weights are loaded for scalar grammar or prompt-boundary checks. GPU checks and new performance comparisons are separate from these local checks.
 
-`requirements-vllm.lock` is an optional separate serving environment for future comparisons. The retained vLLM client expects a local server with `--served-model-name jsonllm`; vLLM was not used for the reported shared-runtime results.
+`requirements-vllm.lock` defines the separate serving environment used in the [execution design study](design-benchmark.md). The vLLM client expects a local server with `--served-model-name jsonllm`. The earlier training evaluation did not use vLLM. See the [design protocol](design-benchmark-protocol.md) to regenerate the report from recovered trials without GPU inference. The archive includes compressed raw records, summaries, exact inputs, and SHA-256 manifests. Its evidence directory contains sanitized recovery/cost/check receipts added after measurement; private infrastructure logs remain local.

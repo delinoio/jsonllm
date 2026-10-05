@@ -1,4 +1,6 @@
-# Evaluation: frozen v0.1 experiment
+# Historical training evaluation: frozen v0.1 experiment
+
+The separate execution study is complete: see [design benchmark results](design-benchmark.md). Its fresh-task accuracy must be reported separately from the historical scores below.
 
 These are results from the completed 2026-10-04 experiment, not new measurements made during repository preparation. A single candidate was trained from the fixed original Qwen3.5-4B revision. Validation occurred once per model, followed by candidate sealing, twenty test trials, and one rollout per model. All test inference trials completed without execution errors.
 
@@ -76,6 +78,6 @@ The completed campaign cost estimate was $29.070653516: API conservative account
 
 ## Limits and next experiments
 
-The restricted synthetic benchmark does not establish general factual reliability, unseen schema performance, arbitrary tree generation, workflow synthesis, or a causal speedup from shared context. No additional paid API call or GPU performance run was made to prepare this repository. See [the follow-up plan](benchmark-plan.md).
+The restricted synthetic benchmark does not establish general factual reliability, unseen schema performance, arbitrary tree generation, workflow synthesis, or a causal speedup from shared context. No additional paid API call or GPU performance run was made during initial repository packaging. The later, separately approved [execution design study](design-benchmark.md) is now complete.
 
 Per-trial timings, token counts, memory, quality, and pooled type statistics are in [evaluation.json](evaluation.json). [Provenance](provenance.md) records the frozen hashes and terms references. Operational logs and account details are excluded.

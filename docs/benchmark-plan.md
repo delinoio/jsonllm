@@ -1,6 +1,6 @@
-# Follow-up benchmarks — not yet performed
+# Follow-up benchmark plan and status
 
-These experiments are a separate step after repository initialization. No results from them are claimed in this release.
+The approved execution study completed on 2026-10-05. See the [results](design-benchmark.md), [protocol](design-benchmark-protocol.md), and complete raw archive. The original research questions below remain useful context. Broader synthesis, larger models, and real UI usefulness remain untested.
 
 ## Isolate the mechanism
 

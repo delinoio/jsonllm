@@ -19,7 +19,13 @@ This is a small, budget-conscious experiment based on Qwen3.5-4B. It is an invit
 
 The model does **not** invent arbitrary component trees or workflows in this version. The application defines the structure and rules. General tree generation, dynamic graph construction, and larger-model scaling are research questions. See [design](docs/design.md) and [planned benchmarks](docs/benchmark-plan.md).
 
-## Current evidence
+## Execution design results
+
+The completed study ran all 540 planned trials on new synthetic tasks, with frozen weights and no retraining. Batching fields reduced median latency versus serial fields by about 3.14× under both models, with no observed quality loss. Prefix sharing was slower than ordinary batching on the short-context core set, but faster at 513–1,026 common-context tokens in the small exploratory sweep.
+
+Quality limits the broader claim. JSONLLM core exact accuracy was 78.52% for whole JSON and 65.23% for shared fields. Shared fields had lower median latency but worse p95, and failed the quality-preserving speed criterion. vLLM had the highest correct throughput, while typed tree/workflow selection scored 0% exact accuracy. All failures and exclusions are retained. See the [full design report and graphs](docs/design-benchmark.md), [raw measurements](docs/benchmarks/design-20261004/README.md), and [protocol](docs/design-benchmark-protocol.md).
+
+## Historical training evidence
 
 A single LoRA candidate was trained on 8,000 synthetic records, validated on 1,000, then frozen before testing on 1,000 held-out records. Both models used the same custom runtime on one H100 80 GB GPU.
 
@@ -73,7 +79,7 @@ uv run --no-sync pytest -m 'not mlx and not cuda and not tokenizer'
 uv build
 ```
 
-Optional-backend tests skip when their dependencies or hardware are unavailable. No paid service is needed for the CPU tests. New GPU comparisons are deferred to a separate benchmark phase. [Release verification](docs/release-verification.json) records the CPU checks and private upload integrity.
+Optional-backend tests skip when their dependencies or hardware are unavailable. No paid service is needed for the CPU tests. [Release verification](docs/release-verification.json) records the original packaging checks; [design validation](docs/benchmarks/design-20261004/evidence/validation.json) records the completed benchmark checks.
 
 ## License and provenance
 
