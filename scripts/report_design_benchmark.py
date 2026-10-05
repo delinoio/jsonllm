@@ -69,6 +69,9 @@ def provenance(run, output):
     write_json(evidence / "invalidated.json", invalidated)
     startup = []
     for path in sorted(run.glob("*-server.json")):
+        if path.name == "active-server.json":
+            # This is a private process receipt, not a server-startup measurement.
+            continue
         record = json.loads(path.read_text())
         command = list(record["command"])
         command[0] = "VLLM_PYTHON"

@@ -33,6 +33,7 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
         "torch==2.14.0\n-e file:///private/local/source\npackage @ https://private.invalid\n"
     )
     write_json(run / "base-gate.json", {"status": "passed"})
+    write_json(run / "active-server.json", {"pid": 12345})
     write_json(run / "private-key.json", {"secret": "must-not-export"})
     (run / "gpu-environment.txt").write_text(
         "Driver Version : fixture-driver\nGPU UUID : private-id\nProduct Name : fixture-gpu\n"
@@ -110,6 +111,7 @@ def test_report_cli_retains_failures_and_verifies_archive(tmp_path):
     invalidated = json.loads((output / "evidence/invalidated.json").read_text())
     assert invalidated[0]["retained_local_files"]["private.log"]["bytes"] > 0
     assert not list(output.rglob("private-key.json"))
+    assert not list(output.rglob("active-server.json"))
     assert not list(output.rglob("private.log"))
     hardware = (output / "evidence/hardware.json").read_text()
     assert "fixture-driver" in hardware and "fixture-gpu" in hardware
