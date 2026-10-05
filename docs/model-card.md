@@ -18,7 +18,7 @@ inference: false
 
 A research POC for typed semantic decisions and dependency-aware structured execution. It is intended to help researchers and model builders investigate how a model can resolve unknown values while a runtime handles known structure and deterministic work.
 
-The current task is restricted to registered UI components and state transitions. The model does not generate arbitrary component trees or synthesize general workflows. The repositories are currently private; this card prepares a future open release.
+The current task is restricted to registered UI components and state transitions. The model does not generate arbitrary component trees or synthesize general workflows. The code, model, and completed benchmark artifacts are publicly available for research.
 
 ## Model and files
 
@@ -95,7 +95,7 @@ Batching reduced paired median-record latency versus serial fields by 3.14× [95
 
 Typed bounded tree/workflow selection scored **0% exact accuracy** under both models. The separate fixed-panel UI trial lost 14.06 accuracy points with trained shared fields versus whole-tree JSON. Across all formal methods there were 25 truncated-output errors, zero classified timeouts, and 812 graph-invalid topology executions. These outcomes remain in the archive. No scheduled block was omitted; 32 overlength context records were excluded before inference. Free-form topology synthesis, workflow execution, browser rendering, larger models, and real-world UI usefulness remain untested.
 
-Read the [full design report](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/blob/main/docs/design-benchmark.md), [measurements and raw outputs](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/tree/main/docs/benchmarks/design-20261004), and [protocol](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/blob/main/docs/design-benchmark-protocol.md) in the model repository. The source-repository report is [here](https://github.com/delinoio/jsonllm/blob/main/docs/design-benchmark.md). The report separates the earlier training evaluation from this execution study and includes uncertainty, language/type breakdowns, tokens, memory, queues, failures, and exclusions. Additional all-in cost was an estimated $64.44 ($93.51 including the earlier campaign); resources were deleted after verified recovery. Both repositories remain private.
+Read the [full design report](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/blob/main/docs/design-benchmark.md), [measurements and raw outputs](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/tree/main/docs/benchmarks/design-20261004), and [protocol](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1/blob/main/docs/design-benchmark-protocol.md) in the model repository. The source-repository report is [here](https://github.com/delinoio/jsonllm/blob/main/docs/design-benchmark.md). The report separates the earlier training evaluation from this execution study and includes uncertainty, language/type breakdowns, tokens, memory, queues, failures, and exclusions. Additional all-in cost was an estimated $64.44 ($93.51 including the earlier campaign); resources were deleted after verified recovery. Both repositories are public.
 
 ## License
 

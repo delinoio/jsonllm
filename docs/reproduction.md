@@ -4,7 +4,7 @@ The release preserves the historical training evaluation and a separate complete
 
 ## Get and verify the frozen artifacts
 
-Install the Hugging Face CLI and authenticate with `hf auth login`. From the repository root:
+Install the Hugging Face CLI. Authentication is optional for this public, ungated model. From the repository root:
 
 ```sh
 uv sync --locked
@@ -50,7 +50,7 @@ uv run --no-sync python scripts/benchmark_shared_ui.py \
 
 Use fresh output directories. The historical protocol ran each model five times at concurrency 1 and five at concurrency 8, plus one rollout per model with `--rollout`. Validation preceded candidate sealing; test results were not used to change the candidate. The original model was `Qwen/Qwen3.5-4B` at `851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a` under the same runtime.
 
-Inference summaries can contain pending factual judgments. They are not the final reviewed accuracy. `jsonllm.shared_review` accepts an explicitly supplied teacher client; no API credential or campaign-specific cloud coordinator is included. The released evaluation summary contains the completed historical judgments. Reproducing those judgments requires a separately authorized review procedure; it is not part of this private upload.
+Inference summaries can contain pending factual judgments. They are not the final reviewed accuracy. `jsonllm.shared_review` accepts an explicitly supplied teacher client; no API credential or campaign-specific cloud coordinator is included. The released evaluation summary contains the completed historical judgments. Reproducing those judgments requires a separately authorized review procedure; it is not part of this release.
 
 ## Local checks
 

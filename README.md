@@ -43,7 +43,7 @@ Concurrency 8 made throughput worse than concurrency 1. The runtime serializes r
 
 ## Quick start
 
-Python 3.12 and [uv](https://docs.astral.sh/uv/) are used for the locked environment. The repositories are currently private; authorized access is required.
+Python 3.12 and [uv](https://docs.astral.sh/uv/) are used for the locked environment. The code and model repositories are public.
 
 ```sh
 git clone https://github.com/delinoio/jsonllm.git
@@ -66,7 +66,7 @@ uv run --no-sync jsonllm run \
   --input examples/genui-order.input.json
 ```
 
-The CLI uses the model ID and immutable release revision in [`release.py`](src/jsonllm/release.py). Hugging Face authentication is required while the model is private. Stored weights are **BF16**; the tested shared CUDA runtime converts weights and buffers to **FP16**. This custom runtime is the supported way to reproduce the POC behavior. A generic chat pipeline does not reproduce its execution contract.
+The CLI uses the model ID and immutable release revision in [`release.py`](src/jsonllm/release.py). The model can be downloaded without Hugging Face authentication. Stored weights are **BF16**; the tested shared CUDA runtime converts weights and buffers to **FP16**. This custom runtime is the supported way to reproduce the POC behavior. A generic chat pipeline does not reproduce its execution contract.
 
 See [usage](docs/usage.md), [reproduction](docs/reproduction.md), [model card](docs/model-card.md), and [dataset description](docs/dataset.md). Weights, the original adapter, and frozen data are stored together in [the model repository](https://huggingface.co/kdy1/JSONLLM-Qwen3.5-4B-v0.1); they are not checked into GitHub.
 

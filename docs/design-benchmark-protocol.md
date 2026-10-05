@@ -1,8 +1,8 @@
 # Design benchmark protocol
 
 This study tests execution mechanisms. It does not train a model or select a new
-checkpoint. Both the code repository and model repository remain private until
-the owner reviews the results.
+checkpoint. The code and model repositories were kept private during the study.
+The owner approved public access after the experiment and results review.
 
 ## Comparisons
 
